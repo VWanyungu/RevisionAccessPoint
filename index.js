@@ -37,7 +37,7 @@ app.post('/home',(req,res)=>{
 
 // Notes page
 app.get('/notes/:school/:department/:year/:unit', (req, res) => {
-    if (req.params.school && req.params.department && req.params.year && req.params.unit) {
+    try{
         const school = req.params.school;
         const department = req.params.department;
         const year = req.params.year;
@@ -65,9 +65,11 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
             console.log('Unable to scan directory: ' + err);
             res.redirect('/home');
         });
-    } else {
+    }catch(err){
+        console.log(err);
         res.redirect('/home');
     }
+        
 });
 
 app.get('/pdf', (req, res) => {
