@@ -6,7 +6,7 @@ let warnBtn = document.getElementById('warn')
 
 if (schoolSelect.value == 'SCI') {
     departmentSelect.innerHTML = `
-        <option value="Computer Science" default>Computer Science</option>
+        <option value="Computer_Science" default>Computer Science</option>
         <option value="Information Technology">Information Technology</option>
     ` 
 }
@@ -14,7 +14,7 @@ if (schoolSelect.value == 'SCI') {
 schoolSelect.addEventListener('change', (e) => {
     if (schoolSelect.value == 'SCI') {
         departmentSelect.innerHTML = `
-            <option value="Computer Science" default>Computer Science</option>
+            <option value="Computer_Science" default>Computer Science</option>
             <option value="Information Technology">Information Technology</option>
         ` 
         console.log("CHANGED")
@@ -28,9 +28,9 @@ schoolSelect.addEventListener('change', (e) => {
 })
 
 yearSelect.addEventListener('change', (e) => {
-    if (yearSelect.value == 'Year 2.2' && schoolSelect.value == 'SCI' && departmentSelect.value == 'Computer Science') {
+    if (yearSelect.value == 'Year_2.2' && schoolSelect.value == 'SCI' && departmentSelect.value == 'Computer_Science') {
         unitSelect.innerHTML = `
-            <option value="Data structures and algorithms" default>Data strcutures and algorithms</option>
+            <option value="Data_structures_and_algorithms" default>Data strcutures and algorithms</option>
             <option value="Research methodology">Research methodology</option>
         ` 
     } 
