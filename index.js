@@ -4,8 +4,10 @@ const path = require('path')
 
 const app = express();
 app.set('viewengine','ejs')
-app.use(express.static('public'))
-app.use(express.static('notes'))
+// app.use(express.static('public'))
+// app.use(express.static('notes'))
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'notes')));
 app.use(express.urlencoded({extended: true}))
 
 
@@ -67,10 +69,6 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
         res.redirect('/home');
     }
 });
-
-// app.get('/notes',(req,res)=>{
-//     res.render('notes.ejs')
-// })
 
 app.get('/pdf', (req, res) => {
     res.render('pdf.ejs');
