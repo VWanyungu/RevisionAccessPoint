@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs').promises
+const path = require('path')
 
 const app = express();
 app.set('viewengine','ejs')
@@ -33,9 +35,6 @@ app.post('/home',(req,res)=>{
 
 // Notes page
 app.get('/notes/:school/:department/:year/:unit', (req, res) => {
-    const fs = require('fs').promises
-    const path = require('path')
-
     if (req.params.school && req.params.department && req.params.year && req.params.unit) {
         const school = req.params.school;
         const department = req.params.department;
@@ -68,6 +67,10 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
         res.redirect('/home');
     }
 });
+
+// app.get('/notes',(req,res)=>{
+//     res.render('notes.ejs')
+// })
 
 app.get('/pdf', (req, res) => {
     res.render('pdf.ejs');
