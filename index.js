@@ -73,7 +73,11 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
 });
 
 app.get('/pdf', (req, res) => {
+    // res.render('pdf.ejs');
+    res.setHeader('Content-Disposition', 'inline');
+    res.sendFile(path.join(__dirname, '/notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf'));
     res.render('pdf.ejs');
+
 })
 
 

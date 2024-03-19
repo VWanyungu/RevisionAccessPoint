@@ -19,15 +19,11 @@
     <!-- PDF viewer -->
     <script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
     <style>
-        #viewerContainer {
-            height: 80vh;
-            width: 100%;
-        }
-
         pdfjs-viewer-element {
-          height: 100%;
-          width: 100%;
-          margin: auto;
+          height: 100vh;
+          width: 100vw;
+          margin: 0;
+          /* margin: auto; */
         }
     </style>
   </head>
@@ -61,15 +57,13 @@
       </div>
     </div>
 
-    <div class="container-fluid">
-        <div class="d-flex justify-content-center align-items-center mt-2" id="viewerContainer">
-          <pdfjs-viewer-element 
-          src="/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf" 
-          viewer-path="/pdfjs-4.0.379-dist"
-          viewer-extra-styles="#download { display: none } #print { display: none }"
-          viewer-css-theme="LIGHT">
-          </pdfjs-viewer-element>
-        </div>
+    <div class="container-fluid p-0">
+      <pdfjs-viewer-element 
+        src="/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf" 
+        viewer-path="/pdfjs-4.0.379-dist"
+        viewer-extra-styles="#download { display: none } #print { display: none }"
+        viewer-css-theme="LIGHT">
+      </pdfjs-viewer-element>
     </div>
 
     <!-- MDB -->
