@@ -36,12 +36,4 @@ yearSelect.addEventListener('change', (e) => {
     } 
 })
 
-unitSelect.addEventListener('change', (e) => {
-    if(schoolSelect.value === '' || yearSelect.value === '' || departmentSelect.value === '' || unitSelect.value === '') {
-        warnBtn.style.display = 'block'
-    } else {
-        warnBtn.style.display = 'none'
-    }    
-})
-
 

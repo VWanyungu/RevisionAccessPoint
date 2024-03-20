@@ -16,10 +16,34 @@ app.get('/',(req,res)=>{
     res.render('index.ejs')
 })
 
+app.post('/', (req,res)=>{
+    let username = req.body.username
+    let password = req.body.password
+
+    if(username === 'admin' && password === 'admin'){
+        res.redirect('/home')
+    }else{
+        res.redirect('/')
+    }
+})
+
 // Sign up page
 app.get('/signUp',(req,res)=>{
     res.render('signUp.ejs')
 })
+
+// app.post('/signUp',(req,res)=>{
+//     let username = req.body.username
+//     let email = req.body.email
+//     let password = req.body.password
+//     let confirmPassword = req.body.confirmPassword
+
+//     if(password === confirmPassword){
+//         res.redirect('/')
+//     }else{
+//         res.redirect('/signUp')
+//     }
+// })
 
 // Home page
 app.get('/home',(req,res)=>{
@@ -43,6 +67,8 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
         const year = req.params.year;
         const unit = req.params.unit;
 
+        const test = `notes/${school}/${department}/${year}/${unit}`
+
         const directoryPath1 = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/classNotes`);
         const directoryPath2 = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/exams`);
         const directoryPath3 = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/cats`);
@@ -53,6 +79,10 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
             fs.readdir(directoryPath3)
         ]).then(([files1, files2, files3]) => {
             res.render('notes.ejs', {
+                test,
+                notesPath: directoryPath1,
+                examsPath: directoryPath2,
+                catsPath: directoryPath3,
                 school: school,
                 department: department,
                 year: year,
@@ -72,11 +102,19 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
         
 });
 
-app.get('/pdf', (req, res) => {
+app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
+    const school = req.params.school
+    const department = req.params.department
+    const year = req.params.year
+    const unit = req.params.unit
+    const folder = req.params.folder
+    const file = req.params.file
+    const path = `/${school}/${department}/${year}/${unit}/${folder}/${file}`
+    const notesPath = `/notes/${school}/${department}/${year}/${unit}`
     // res.render('pdf.ejs');
-    res.setHeader('Content-Disposition', 'inline');
-    res.sendFile(path.join(__dirname, '/notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf'));
-    res.render('pdf.ejs');
+    // res.setHeader('Content-Disposition', 'inline');
+    // res.sendFile(path.join(__dirname, '/notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf'));
+    res.render('pdf.ejs',{path,notesPath});
 
 })
 
