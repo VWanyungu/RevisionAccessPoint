@@ -4,10 +4,9 @@ const path = require('path')
 
 const app = express();
 app.set('viewengine','ejs')
-// app.use(express.static('public'))
-// app.use(express.static('notes'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'notes')));
+app.use(express.static(path.join(__dirname, 'icons')));
 app.use(express.urlencoded({extended: true}))
 
 
