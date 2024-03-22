@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "npx nodemon index.js"
+    "dev": "npx nodemon index.js",
+    "yolo" : "git status && git add . && git commit -m 'yolo' && git push"
   },
   "keywords": [],
   "author": "",

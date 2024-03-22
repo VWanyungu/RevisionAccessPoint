@@ -31,5 +31,5 @@
     "theme_color":"#044aab",
     "background_color":"#ffffff",
     "display":"standalone",
-    "orientation":"landscape"
+    "orientation":"portrait"
 }
