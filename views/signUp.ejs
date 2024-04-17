@@ -18,7 +18,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4066811607299460" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="container" id="loginPage" style="
+    <div class="container-fluid d-flex justify-content-center align-items-center" id="loginPage" style="
         background-image: url('javier-trueba-iQPr1XkF5F0-unsplash.jpg');
         background-position: center;
         background-repeat: no-repeat;
@@ -38,8 +38,8 @@
         ">
             
         </div>
-        <div class="row ms-2 me-2" style="position: absolute; z-index: 2;">
-            <div class="col-md-12 mb-4 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
+        <div class="container" style=" z-index: 2;">
+            <div class=" mb-4 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
                 <div class="me-2">
                     <i class="fa fa-bookmark" aria-hidden="true"></i>
                 </div>
@@ -52,28 +52,45 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4  p-0">
+            <div class=" p-0">
                 <div class="card m-0" style="background: linear-gradient(to top, #ff3131 0%, #004aad 100%);">
                     <div class="card-body m-0">
-                        <form action="" method="post">
+                        <form action="/signUp" method="post">
                             <div class="mb-3">
                                 <label for="signUpName" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">Name</h6></label>
                                 <input type="text" class="form-control" id="signUpName" name="signUpName" required>
                             </div>
                             <div class="mb-3">
-                                <label for="signUpPhone" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">Phone number</h6></label>
-                                <input type="test" class="form-control" id="signUpPhone" name="signUpPhone" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="signUpEmail" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">Email</h6></label>
-                                <input type="email" class="form-control" id="signUpEmail" name="signUpEmail" required>
-                            </div>
-                            <div class="mb-3">
                                 <label for="password" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">Password</h6></label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="text" class="form-control" id="password" name="password" required>
                             </div>
                             <div class="mb-3">
-                                <button type="submit" class="btn" style="width: 100%; background-color: #004aad;"><h6 class="h6 text-light" style="font-size: 20px;">Sign up</h6></button>
+                                <label for="year" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">year</h6></label>
+                                <input type="text" class="form-control" id="year" name="year" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sem" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">sem</h6></label>
+                                <input type="text" class="form-control" id="sem" name="sem" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="school" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">school</h6></label>
+                                <input type="text" class="form-control" id="school" name="school" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="department" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">department</h6></label>
+                                <input type="text" class="form-control" id="department" name="department" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="course" class="form-label"><h6 class="h6 text-light" style="font-size: 20px;">course</h6></label>
+                                <input type="text" class="form-control" id="course" name="course" required>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn" style="width: 100%; background-color: #004aad;">
+                                    <h6 class="h6 text-light" style="font-size: 20px;">
+                                        Sign up
+                                    </h6>
+                                </button>
+
                                 <center><h6 class="h6 text-light mt-3" style="font-size: 20px;">Back to <a class="text-light" href="/"><strong style="text-decoration: underline;">Login</strong></a></h6></center>
                             </div>
                         </form>
