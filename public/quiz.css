@@ -1,0 +1,34 @@
+#quizNav li{
+    transition: 0.5s;
+}
+
+#quizNav li:not(:last-child):hover{
+    border: 2px solid blue !important;
+}
+
+#quizNav li:not(:last-child):hover a{
+    color: blue !important;
+}
+
+
+/* Hide the default radio input */
+input[type="radio"] {
+    display: none;
+}
+
+/* Create a new radio input */
+input[type="radio"] + label:before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    border: 2px solid #004aad;
+    background-color: #fff;
+}
+
+/* Style the radio input when it's checked */
+input[type="radio"]:checked + label:before {
+    background-color: #004aad;
+}

@@ -133,6 +133,11 @@ app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
 
 })
 
+// Quiz page
+app.get('/quiz', (req,res)=>{
+    res.render('quiz.ejs')
+})
+
 
 app.listen(3030,()=>{
     console.log('Server is running on port 3030');
