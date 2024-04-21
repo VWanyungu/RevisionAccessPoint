@@ -55,6 +55,7 @@
       </div>
     </div>
 
+    <!-- Course information -->
     <div class="container-fluid mt-2">
         <h4 class="m-0" style="text-transform: uppercase;"><%= school %></h4>
         <H4 class="m-0" style="text-transform: uppercase;"><%= department %></H4>
@@ -62,6 +63,8 @@
         <h4 class="m-0 mb-1" style="text-transform: uppercase;"><%= unit %></h4>
         <div style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 5px;"></div>
     </div>
+
+    <!-- Content navigation buttons -->
     <div class="container-fluid mt-3">
         <ul class="nav nav-pills d-flex justify-content-between align-items-center m-0" role="tablist" style="list-style: none;">
             <li class="p-1 ps-4 pe-4 rounded " style="border: 2px solid darkgray;">
@@ -78,22 +81,26 @@
             </li>
         </ul>
     </div>
+
+    <!-- Notes div -->
     <div class="container-fluid tab-content mt-3" id="pills-tabContent">
-        <div class="tab-pane fade show" id="notes" role="tabpanel">
+        <div class="tab-pane fade show pb-4" id="notes" role="tabpanel">
+            <!-- Note -->
             <% notes.forEach(function(note) { %>
                 <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
                     <div class="text-light bg-light m-0 rounded p-3" style="width: 100%; height: 100%;">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex">
                                 <img src="/notes.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h4 class="h5" style="color: #004aad;"><%= note %></h4>
+                                <h4 class="h5 pe-2" style="color: #004aad;"><%= note %></h4>
                             </div>
                             <!-- <a href=""><button class="rounded ps-4 pe-4 pt-1 pb-1 text-light" style="background-color: #004aad; border: none;">
                                 <i class="fa fa-download" aria-hidden="true"></i>
                             </button></a> -->
                             <div class="d-flex">
+                                <a href="/notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/<%= encodeURIComponent(note) %>" class="text-danger me-2" download="<%= note %>"><i class="fa-solid fa-pen-to-square"></i></a>
+
                                 <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=encodeURIComponent(note)%>" class="text-danger"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
-                                <!-- <a href="/notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/<%= encodeURIComponent(note) %>" class="text-danger" download="<%= note %>"><i class="fa fa-download" aria-hidden="true"></i></a> -->
                             </div>
                         </div>
                     </div>
@@ -101,6 +108,8 @@
             <% }); %>
             
         </div>
+
+        <!-- Exams div -->
         <div class="tab-pane fade show" id="exams" role="tabpanel">
             <% exams.forEach(function(exam) { %>
                 <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
@@ -120,6 +129,8 @@
             <% }) %>
            
         </div>
+
+        <!-- Cats div -->
         <div class="tab-pane fade show" id="cats" role="tabpanel">
             <% cats.forEach(function(cat) { %>
                 <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
@@ -138,6 +149,8 @@
             <% }) %>
             
         </div>
+
+        <!-- Tutorials div -->
         <div class="tab-pane fade show" id="tutorials" role="tabpanel">
             <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
                 <div class="text-light bg-light rounded" style="width: 100%; position: relative;">
