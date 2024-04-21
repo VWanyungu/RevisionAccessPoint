@@ -8,9 +8,6 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Access to database and database functions
-import * as db from './database.js'
-
 const app = express();
 app.set('viewengine','ejs')
 
@@ -18,6 +15,10 @@ app.set('viewengine','ejs')
 app.use(express.static('public'));
 app.use(express.static('notes'));
 app.use(express.static('icons'));
+
+// Access to database and database functions
+import * as db from './database.js'
+import * as quiz from './quiz.js'
 
 // To parse req.body
 app.use(express.urlencoded({extended: true}))
@@ -135,7 +136,35 @@ app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
 
 // Quiz page
 app.get('/quiz', (req,res)=>{
-    res.render('quiz.ejs')
+    const questions = quiz.getQuestions()
+    let name = 1
+    res.render('quiz.ejs',{questions,name})
+})
+
+app.post('/quiz',async (req,res)=> {
+    // Converting the req.body object into an array based on values
+    const answers = Object.values(req.body) 
+    const questions = quiz.getQuestions()
+
+    // Array of indices of the failed questions
+    let failedQuestions = []
+
+    // Comparing actual answers and received answers, to obtain the score
+    function getScore(){
+        let score = 0
+        for(let i = 0; i < questions.length; i++){
+            if(questions[i].answer === answers[i]){
+                score++
+            }else{
+                failedQuestions.push(i)
+            }
+        }
+        return score
+    }
+
+    let finalScore = await getScore()
+
+    res.render('quizResults.ejs',{finalScore, failedQuestions, questions})
 })
 
 
