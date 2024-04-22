@@ -135,13 +135,29 @@ app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
 })
 
 // Quiz page
-app.get('/quiz', (req,res)=>{
+app.get('/quiz/:school/:department/:year/:unit/:folder/:file', (req,res)=>{
+    const school = req.params.school
+    const department = req.params.department
+    const year = req.params.year
+    const unit = req.params.unit
+    const folder = req.params.folder
+    const file = req.params.file
+    const path = `/${school}/${department}/${year}/${unit}`
+    const backPath = `/notes/${school}/${department}/${year}/${unit}`
+    const filePath = `/notes/${school}/${department}/${year}/${unit}/${folder}/${file}`
+
     const questions = quiz.getQuestions()
-    let name = 1
-    res.render('quiz.ejs',{questions,name})
+
+    res.render('quiz.ejs',{questions, backPath, filePath, path})
 })
 
-app.post('/quiz',async (req,res)=> {
+app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
+    const school = req.params.school
+    const department = req.params.department
+    const year = req.params.year
+    const unit = req.params.unit
+    const backPath = `/notes/${school}/${department}/${year}/${unit}`
+
     // Converting the req.body object into an array based on values
     const answers = Object.values(req.body) 
     const questions = quiz.getQuestions()
@@ -164,7 +180,7 @@ app.post('/quiz',async (req,res)=> {
 
     let finalScore = await getScore()
 
-    res.render('quizResults.ejs',{finalScore, failedQuestions, questions})
+    res.render('quizResults.ejs',{finalScore, failedQuestions, questions, backPath})
 })
 
 
