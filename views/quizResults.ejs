@@ -63,7 +63,7 @@
   <!-- Quiz information -->
   <div class="container-fluid mt-2">
       <div class="d-flex justify-content-between align-items-center">
-          <h4 class="m-0 mb-1" style="text-transform: uppercase;">Data structures . <span class="text-muted">Results</span></h4>
+          <h4 class="m-0 mb-1" style="text-transform: uppercase;">D<%= unit %> . <span class="text-muted">Results</span></h4>
           <h4 class="m-0 mb-1" style="text-transform: uppercase;" id="grade">Score:  <span class="text-success"><%=finalScore%>/<%=questions.length%></span></h4>
       </div>
 
@@ -82,16 +82,16 @@
       <% failedQuestions.forEach(question => {%>
         <div class="d-flex justify-content-between bg-light rounded p-3 m-2">
             <div class="d-flex flex-column">
-                <h6 class="h5 pe-2 text-muted"><%= questions[question].question %></h6>
-                <h5 class="text-success h5" style="font-weight: 300;"> <%= questions[question].answer %> </h5>
-                <form action="">
-                    <%questions[question].choices.forEach(choice =>{%>
+                <h6 class="h5 pe-2 text-muted"><%= question.question %></h6>
+                <h5 class="text-success h5" style="font-weight: 300;"> <%= question.answer %> </h5>
+                <!-- <form action="">
+                    
                         <div class="form-check p-0">
-                            <input type="radio" class="form-check-input" id="<%=choice%>" name="" value="">
-                            <label class="form-check-label text-muted h5" for="<%=choice%>" style="font-weight: 300;"> <%= choice %> </label>
+                            <input type="radio" class="form-check-input" id="" name="" value="">
+                            <label class="form-check-label text-muted h5" for="" style="font-weight: 300;">  </label>
                         </div>
-                    <%})%>
-                </form>
+                    
+                </form> -->
             </div>
         </div>
     <%})%>

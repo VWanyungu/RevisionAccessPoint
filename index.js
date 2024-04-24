@@ -1,6 +1,10 @@
-import express from 'express'
+import express, { json } from 'express'
 import {promises as fs} from 'fs'
 import path from 'path'
+
+import axios from "axios"
+import FormData from "form-data"
+import fs2 from "fs"
 
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
 import { fileURLToPath } from 'url';
@@ -18,7 +22,8 @@ app.use(express.static('icons'));
 
 // Access to database and database functions
 import * as db from './database.js'
-import * as quiz from './quiz.js'
+import * as quiz from './quiz.js' //Hard coded questions
+// import * as chatpdf from './chatpdf.js'
 
 // To parse req.body
 app.use(express.urlencoded({extended: true}))
@@ -135,7 +140,7 @@ app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
 })
 
 // Quiz page
-app.get('/quiz/:school/:department/:year/:unit/:folder/:file', (req,res)=>{
+app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>{
     const school = req.params.school
     const department = req.params.department
     const year = req.params.year
@@ -144,35 +149,163 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', (req,res)=>{
     const file = req.params.file
     const path = `/${school}/${department}/${year}/${unit}`
     const backPath = `/notes/${school}/${department}/${year}/${unit}`
-    const filePath = `/notes/${school}/${department}/${year}/${unit}/${folder}/${file}`
+    const filePath = `notes/${school}/${department}/${year}/${unit}/${folder}/${file}`
 
-    const questions = quiz.getQuestions()
+    let srcId
+    let result
+    let finalResult
 
-    res.render('quiz.ejs',{questions, backPath, filePath, path})
+    // chatPdf("notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf").then(question)
+
+    function chatPdf(path){
+        const formData = new FormData();
+        formData.append(
+        "file",
+        // fs.createReadStream("notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf")
+        fs2.createReadStream(path)
+        );
+
+        const options = {
+        headers: {
+            "x-api-key": "sec_xwl0QnnbRpHokK77RB16MPV4gdgbG0jM",
+            ...formData.getHeaders(),
+        },
+        };
+
+        return axios
+        .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
+        .then((response) => {
+            srcId = response.data.sourceId
+            console.log("Source ID:", srcId);
+        })
+        .catch((error) => {
+            console.log("Error pdf:", error.message);
+            console.log("Response pdf:", error.response.data);
+        });
+    }
+
+    function question(){
+        // Asking the question
+        const config = {
+            headers: {
+                "x-api-key": "sec_xwl0QnnbRpHokK77RB16MPV4gdgbG0jM",
+                "Content-Type": "application/json",
+            },
+        };
+        
+        const data = {
+            sourceId: `${srcId}`,
+            messages: [
+                {
+                "role": "user",
+                "content": "generate 20 sample multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20.",
+                },
+            ],
+        };
+        
+        return axios
+            .post("https://api.chatpdf.com/v1/chats/message", data, config)
+            .then((response) => {
+                result = response.data.content
+                toJson(result)
+                // console.log("Result:", result);
+            })
+            .catch((error) => {
+                console.error("Error question:", error.message);
+                console.log("Response question:", error.response.data);
+            });
+    }
+
+    function toJson(sampleData){
+        try{
+            if (sampleData === undefined) {
+                throw new Error("No data found");
+            }
+
+            var questions = sampleData.split('\n\n').filter(function(item) {
+                return item.trim().length > 0;
+            });
+            
+            var mcqData = [];
+            questions.forEach(function(question) {
+                var lines = question.split('\n');
+                var qData = {
+                    question: lines[0].trim(),
+                    options: [],
+                    answer: lines[lines.length - 1].trim()
+                };
+                for (var i = 1; i < lines.length - 1; i++) {
+                    qData.options.push(lines[i].trim());
+                }
+                mcqData.push(qData);
+            });
+        
+            let display = JSON.stringify(mcqData)
+            finalResult = JSON.parse(display)
+            console.log("Sample Result:", finalResult[1])
+        }catch(error){
+            console.log(error.message)
+        }
+    
+    }
+
+    async function handleRequest() {
+        try {
+            await chatPdf(filePath);
+            await question();
+            // Submit your response here
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    
+    await handleRequest();
+
+    // Getting rid of non-question response from the AI
+    finalResult.pop()
+    finalResult.shift()
+
+    let answers = []
+    let questions = []
+    // Getting answers from the questions to make them availbale in the scoring post route 
+    finalResult.forEach((q)=>{
+        answers.push(q.answer)
+        let temp = q.question
+        temp = temp.replace(/[?]/g, '')
+        questions.push(temp)
+    })
+
+    let scoreRouteAnswers = JSON.stringify(answers)
+    let scoreRouteQuestions = JSON.stringify(questions)
+
+    res.render('quiz.ejs',{finalResult, backPath, path, unit, scoreRouteAnswers, scoreRouteQuestions,})
 })
 
-app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
+app.post('/quiz/:school/:department/:year/:unit/:answers/:questions',async (req,res)=> {
+    // Add options feature soon
+    // console.log(req.params.questions)
+    // console.log(req.params.answers)
+
     const school = req.params.school
     const department = req.params.department
     const year = req.params.year
     const unit = req.params.unit
     const backPath = `/notes/${school}/${department}/${year}/${unit}`
-
-    // Converting the req.body object into an array based on values
+    const questions = JSON.parse(decodeURIComponent(req.params.questions))
+    const correctAnswers = JSON.parse(decodeURIComponent(req.params.answers)) 
     const answers = Object.values(req.body) 
-    const questions = quiz.getQuestions()
-
-    // Array of indices of the failed questions
     let failedQuestions = []
 
-    // Comparing actual answers and received answers, to obtain the score
-    function getScore(){
+    async function getScore(){
         let score = 0
-        for(let i = 0; i < questions.length; i++){
-            if(questions[i].answer === answers[i]){
+        for(let i = 0; i < answers.length; i++){
+            if(correctAnswers[i].includes(answers[i])){
                 score++
             }else{
-                failedQuestions.push(i)
+                failedQuestions.push({
+                    question: questions[i],
+                    answer: correctAnswers[i]
+                })
             }
         }
         return score
@@ -180,7 +313,7 @@ app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
 
     let finalScore = await getScore()
 
-    res.render('quizResults.ejs',{finalScore, failedQuestions, questions, backPath})
+    res.render('quizResults.ejs',{finalScore, failedQuestions, questions, backPath, unit})
 })
 
 

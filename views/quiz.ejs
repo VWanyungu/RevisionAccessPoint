@@ -66,8 +66,8 @@
     <!-- Quiz information -->
     <div class="container-fluid mt-2">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="m-0 mb-1" style="text-transform: uppercase;">Data structures . <span class="text-muted">Quiz</span></h4>
-            <h4 class="m-0 mb-1 text-success" style="text-transform: uppercase;"><%=questions.length%> qns</h4>
+            <h4 class="m-0 mb-1" style="text-transform: uppercase;"><%= unit %> . <span class="text-muted">Quiz</span></h4>
+            <h4 class="m-0 mb-1 text-success" style="text-transform: uppercase;"><%= finalResult.length%> qns</h4>
         </div>
 
         <div style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 5px;"></div>
@@ -75,19 +75,19 @@
 
     <!-- Quiz -->
     <div class="container-fluid mt-3" >
-        <form action="/quiz<%=path%>" method="post" class="tab-content" id="pills-tabContent">
+        <form action="/quiz<%=path%>/<%=scoreRouteAnswers%>/<%=scoreRouteQuestions%>" method="post" class="tab-content" id="pills-tabContent">
             <!-- Page 1 -->
             <div class="pb-4">
                 <!-- Question -->
-                <% questions.forEach(question => { %>
+                <% finalResult.forEach(result => { %>
                     <div class="d-flex justify-content-between bg-light rounded p-3 mt-2">
                         <div class="d-flex flex-column">
-                            <h6 class="h5 pe-2 text-muted"><%= question.question %></h6>
+                            <h6 class="h5 pe-2 text-muted"><%= result.question %></h6>
 
-                            <% question.choices.forEach(choice => { %>
+                            <% result.options.forEach(option => { %>
                                 <div class="form-check p-0">
-                                    <input type="radio" class="form-check-input" id="<%=choice%>" name="<%=question.question%>" value="<%= choice%>" checked>
-                                    <label class="form-check-label text-muted h5" for="<%=choice%>" style="font-weight: 300;"> <%= choice %> </label>
+                                    <input type="radio" class="form-check-input" id="<%=option%>" name="<%=result.question%>" value="<%= option%>" checked>
+                                    <label class="form-check-label text-muted h5" for="<%=option%>" style="font-weight: 300;"> <%= option %> </label>
                                 </div>
                             <% })%>
                             
