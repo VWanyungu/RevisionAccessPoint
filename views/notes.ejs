@@ -7,6 +7,7 @@
     <title>Revision Access Point</title>
     <link rel="icon" type="image/x-icon" href="/logo.svg">
     <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/load.css">
     <link rel="manifest" href="/manifest.json">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -83,7 +84,7 @@
     </div>
 
     <!-- Notes div -->
-    <div class="container-fluid tab-content mt-3" id="pills-tabContent">
+    <div class="container-fluid tab-content mt-3 notes" id="pills-tabContent">
         <div class="tab-pane fade show pb-4" id="notes" role="tabpanel">
             <!-- Note -->
             <% notes.forEach(function(note) { %>
@@ -95,7 +96,7 @@
                                 <h4 class="h5 pe-2" style="color: #004aad;"><%= note %></h4>
                             </div>
                             <div class="d-flex justify-content-center align-items-center">
-                                <a href="/quiz/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=note%>" class="text-muted me-2 p-2 rounded" style="border: 1px solid darkgray;">
+                                <a href="/quiz/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=note%>" class="text-muted me-2 p-2 rounded quizLnk" style="border: 1px solid darkgray;">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
 
@@ -161,8 +162,43 @@
         </div>
     </div>
 
+    <div class="loadDiv container d-flex p-5 flex-column align-items-center justify-content-center">
+        <div class="load" style="display: none;">
+            <div class="load2">
+
+            </div>
+        </div>
+        <div class="mt-3 text" style="text-align: center; display: none;">
+            <h1 class="h2 text-muted">Preparing your questions...</h1>
+        </div>
+    </div>
+
+    <script>
+        let messages = [
+            "...",
+            "We're almost there...",
+            "Just a few more seconds...",
+            "We're almost ready...",
+        ]
+
+        setInterval(() => {
+            let message = messages[Math.floor(Math.random() * messages.length)];
+            document.querySelector(".text h1").innerHTML = message;
+        }, 5000);
+
+    </script>
+
     <!-- MDB -->
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script> -->
+    <script>
+        document.querySelector('.quizLnk').addEventListener('click', function(e){
+            console.log("clikces")
+           document.querySelector('.notes').style.display = 'none';
+           document.querySelector('.load').style.display = 'block';
+           document.querySelector('.text').style.display = 'block';
+        })
+    </script>
+
     <script src="/home.js"></script>
     
     <script src="https://kit.fontawesome.com/69a11c0c5f.js" crossorigin="anonymous"></script>

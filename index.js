@@ -12,6 +12,12 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Access to database and database functions
+import * as db from './database.js'
+import * as quiz from './quiz.js' //Hard coded questions
+import * as load from './load.js'
+// import * as chatpdf from './chatpdf.js'
+
 const app = express();
 app.set('viewengine','ejs')
 
@@ -19,15 +25,8 @@ app.set('viewengine','ejs')
 app.use(express.static('public'));
 app.use(express.static('notes'));
 app.use(express.static('icons'));
-
-// Access to database and database functions
-import * as db from './database.js'
-import * as quiz from './quiz.js' //Hard coded questions
-// import * as chatpdf from './chatpdf.js'
-
 // To parse req.body
 app.use(express.urlencoded({extended: true}))
-
 
 // Login page
 app.get('/',(req,res)=>{
@@ -198,7 +197,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             messages: [
                 {
                 "role": "user",
-                "content": "generate 20 sample multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20.",
+                "content": "generate 20 sample multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20. Ensure the answer you give is the correct answer to the question and is part of the choices you provide.",
                 },
             ],
         };
