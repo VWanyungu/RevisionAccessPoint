@@ -197,7 +197,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             messages: [
                 {
                 "role": "user",
-                "content": "generate 20 sample multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20. Ensure the answer you give is the correct answer to the question and is part of the choices you provide.",
+                "content": "generate 20 sample multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20. Ensure the answer you give is the correct answer to the question and is part of the choices you provide. Each question should have 4 choices and must be unique. Ensure the questions are not too easy or too difficult. Use as much information as possible from the pdf file to generate the questions.",
                 },
             ],
         };
