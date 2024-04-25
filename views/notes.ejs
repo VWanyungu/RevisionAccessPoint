@@ -175,14 +175,18 @@
 
     <script>
         let messages = [
-            "...",
-            "We're almost there...",
-            "Just a few more seconds...",
-            "We're almost ready...",
+            "Reading the pdf...",
+            "Generating questions...",
+            "Reviewing answers...",
+            "Almost done...",
         ]
 
+        let count = 0
+
         setInterval(() => {
-            let message = messages[Math.floor(Math.random() * messages.length)];
+            let message = messages[count]
+            count++
+            if(count == messages.length) {count = 0}
             document.querySelector(".text h1").innerHTML = message;
         }, 5000);
 
