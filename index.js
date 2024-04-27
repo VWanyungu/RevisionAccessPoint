@@ -156,7 +156,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
 
     // chatPdf("notes/SCI/Computer_Science/Year_2.2/Data_structures_and_algorithms/classNotes/DATA STRUCTURE.pdf").then(question)
 
-    function chatPdf(path){
+    async function chatPdf(path){
         const formData = new FormData();
         formData.append(
         "file",
@@ -183,7 +183,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
         });
     }
 
-    function question(){
+    async function question(){
         // Asking the question
         const config = {
             headers: {
@@ -197,7 +197,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             messages: [
                 {
                 "role": "user",
-                "content": "generate 20 sample multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20. Ensure the answer you give is the correct answer to the question and is part of the choices you provide. Each question should have 4 choices and must be unique. Ensure the questions are not too easy or too difficult. Use as much information as possible from the pdf file to generate the questions.",
+                "content": "generate 20 multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20. Ensure the answer you give is the correct answer to the question and is part of the choices you provide. Each question should have 4 choices and must be unique. Ensure the questions are not too easy or too difficult.",
                 },
             ],
         };
@@ -206,6 +206,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             .post("https://api.chatpdf.com/v1/chats/message", data, config)
             .then((response) => {
                 result = response.data.content
+                console.log(response.data)
                 toJson(result)
                 // console.log("Result:", result);
             })
@@ -254,7 +255,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             await question();
             // Submit your response here
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Src id and question error:", error);
         }
     }
     
@@ -284,35 +285,40 @@ app.post('/quiz/:school/:department/:year/:unit/:answers/:questions',async (req,
     // Add options feature soon
     // console.log(req.params.questions)
     // console.log(req.params.answers)
+    try{
+        const school = req.params.school
+        const department = req.params.department
+        const year = req.params.year
+        const unit = req.params.unit
+        const backPath = `/notes/${school}/${department}/${year}/${unit}`
+        const questions = JSON.parse(decodeURIComponent(req.params.questions))
+        const correctAnswers = JSON.parse(decodeURIComponent(req.params.answers)) 
+        const answers = Object.values(req.body) 
+        let failedQuestions = []
 
-    const school = req.params.school
-    const department = req.params.department
-    const year = req.params.year
-    const unit = req.params.unit
-    const backPath = `/notes/${school}/${department}/${year}/${unit}`
-    const questions = JSON.parse(decodeURIComponent(req.params.questions))
-    const correctAnswers = JSON.parse(decodeURIComponent(req.params.answers)) 
-    const answers = Object.values(req.body) 
-    let failedQuestions = []
-
-    async function getScore(){
-        let score = 0
-        for(let i = 0; i < answers.length; i++){
-            if(correctAnswers[i].includes(answers[i])){
-                score++
-            }else{
-                failedQuestions.push({
-                    question: questions[i],
-                    answer: correctAnswers[i]
-                })
+        async function getScore(){
+            let score = 0
+            for(let i = 0; i < answers.length; i++){
+                if(correctAnswers[i].includes(answers[i])){
+                    score++
+                }else{
+                    failedQuestions.push({
+                        question: questions[i],
+                        answer: correctAnswers[i]
+                    })
+                }
             }
+            return score
         }
-        return score
+
+        let finalScore = await getScore()
+
+        res.render('quizResults.ejs',{finalScore, failedQuestions, questions, backPath, unit})
+    }catch(err){
+        console.log("Posting error" + err)
     }
 
-    let finalScore = await getScore()
-
-    res.render('quizResults.ejs',{finalScore, failedQuestions, questions, backPath, unit})
+    
 })
 
 
