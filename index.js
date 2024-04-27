@@ -197,7 +197,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             messages: [
                 {
                 "role": "user",
-                "content": "generate 20 multiple choice questions and their answers for me based on the topic of the pdf file I uploaded. Use information from the pdf file to generate the questions if possible. Ensure the questions are 20. Ensure the answer you give is the correct answer to the question and is part of the choices you provide. Each question should have 4 choices and must be unique. Ensure the questions are not too easy or too difficult.",
+                "content": "Given the PDF file I provided, generate 20 multiple choice questions and their answers. Ensure that the questions are neither too hard nor too easy. Each question should have four choices, with the correct answer among them. Use information from the pdf file to generate the questions if possible.",
                 },
             ],
         };
@@ -206,7 +206,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
             .post("https://api.chatpdf.com/v1/chats/message", data, config)
             .then((response) => {
                 result = response.data.content
-                console.log(response.data)
+                console.log("Response to prompt given")
                 toJson(result)
                 // console.log("Result:", result);
             })
@@ -267,11 +267,13 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
 
     let answers = []
     let questions = []
-    // Getting answers from the questions to make them availbale in the scoring post route 
+
+    // Getting answers and questions to make them availbale in the scoring post route 
     finalResult.forEach((q)=>{
         answers.push(q.answer)
+        //removing special characters, in order for the questions to be passed as a parameter in the post route
         let temp = q.question
-        temp = temp.replace(/[?]/g, '')
+        temp = temp.replace(/[?,/]/g, '')
         questions.push(temp)
     })
 
