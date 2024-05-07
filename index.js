@@ -1,10 +1,5 @@
 import express, { json } from 'express'
-import {promises as fs} from 'fs'
 import path from 'path'
-
-import axios from "axios"
-import FormData from "form-data"
-import fs2 from "fs"
 
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
 import { fileURLToPath } from 'url';
@@ -14,9 +9,6 @@ const __dirname = dirname(__filename);
 
 // Access to database and database functions
 import * as db from './database.js'
-import * as quiz from './quiz.js' //Hard coded questions
-import * as load from './load.js'
-// import * as chatpdf from './chatpdf.js'
 
 const app = express();
 app.set('viewengine','ejs')
@@ -84,6 +76,7 @@ app.post('/home',(req,res)=>{
 
 // Notes page
 app.get('/notes/:school/:department/:year/:unit', async (req, res) => {
+    const fs = (await import('fs')).promises;
     try{
         const school = req.params.school;
         const department = req.params.department;
@@ -159,6 +152,10 @@ app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
 
 // Quiz page
 app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>{
+    const axios = (await import("axios"))
+    const FormData = (await import("form-data"))
+    const fs2 = (await import("fs"))
+
     const school = req.params.school
     const department = req.params.department
     const year = req.params.year
