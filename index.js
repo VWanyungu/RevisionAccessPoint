@@ -249,38 +249,37 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
     
     }
 
-    async function handleRequest() {
-        try {
-            await chatPdf(filePath);
-            await question();
-            // Submit your response here
-        } catch (error) {
-            console.error("Src id and question error:", error);
-        }
+    try{
+        
+        await chatPdf(filePath);
+        await question();
+    
+        // Getting rid of non-question response from the AI
+        finalResult.pop()
+        finalResult.shift()
+    
+        let answers = []
+        let questions = []
+    
+        // Getting answers and questions to make them availbale in the scoring post route 
+        finalResult.forEach((q)=>{
+            answers.push(q.answer)
+            //removing special characters, in order for the questions to be passed as a parameter in the post route
+            let temp = q.question
+            temp = temp.replace(/[?,/]/g, '')
+            questions.push(temp)
+        })
+    
+        let scoreRouteAnswers = JSON.stringify(answers)
+        let scoreRouteQuestions = JSON.stringify(questions)
+    
+        res.render('quiz.ejs',{finalResult, backPath, path, unit, scoreRouteAnswers, scoreRouteQuestions,})
+
+    }catch(error){
+        console.log(error)
+        res.redirect(backPath)
     }
     
-    await handleRequest();
-
-    // Getting rid of non-question response from the AI
-    finalResult.pop()
-    finalResult.shift()
-
-    let answers = []
-    let questions = []
-
-    // Getting answers and questions to make them availbale in the scoring post route 
-    finalResult.forEach((q)=>{
-        answers.push(q.answer)
-        //removing special characters, in order for the questions to be passed as a parameter in the post route
-        let temp = q.question
-        temp = temp.replace(/[?,/]/g, '')
-        questions.push(temp)
-    })
-
-    let scoreRouteAnswers = JSON.stringify(answers)
-    let scoreRouteQuestions = JSON.stringify(questions)
-
-    res.render('quiz.ejs',{finalResult, backPath, path, unit, scoreRouteAnswers, scoreRouteQuestions,})
 })
 
 app.post('/quiz/:school/:department/:year/:unit/:answers/:questions',async (req,res)=> {
