@@ -83,7 +83,7 @@ app.post('/home',(req,res)=>{
 })
 
 // Notes page
-app.get('/notes/:school/:department/:year/:unit', (req, res) => {
+app.get('/notes/:school/:department/:year/:unit', async (req, res) => {
     try{
         const school = req.params.school;
         const department = req.params.department;
@@ -92,27 +92,46 @@ app.get('/notes/:school/:department/:year/:unit', (req, res) => {
 
         // const test = `notes/${school}/${department}/${year}/${unit}`
 
-        const directoryPath1 = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/classNotes`);
-        const directoryPath2 = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/exams`);
-        const directoryPath3 = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/cats`);
+        const notes = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/classNotes`);
+        // console.log(notes)
+        const exams = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/exams`);
+        // console.log(exams)
+        const cats = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/cats`);
 
+        
+        let tutorials
+        function split() {
+            return new Promise((resolve, reject) => {
+                fs2.readFile(`notes/${school}/${department}/${year}/${unit}/tutorials.txt`, 'utf8', function(err, data) {
+                    if (err) {
+                        return reject(err);
+                    }
+                    tutorials = data.split('\n');
+                    resolve(tutorials.pop());
+                });
+            });
+        }
+       
         Promise.all([
-            fs.readdir(directoryPath1),
-            fs.readdir(directoryPath2),
-            fs.readdir(directoryPath3)
-        ]).then(([files1, files2, files3]) => {
+            fs.readdir(notes),
+            fs.readdir(exams),
+            fs.readdir(cats),
+            split()
+        ])
+        .then(([files1, files2, files3]) => {
+            split()
             res.render('notes.ejs', {
-                // test,
-                notesPath: directoryPath1,
-                examsPath: directoryPath2,
-                catsPath: directoryPath3,
+                notesPath: notes,
+                examsPath: exams,
+                catsPath: cats,
                 school: school,
                 department: department,
                 year: year,
                 unit: unit,
                 notes: files1,
                 exams: files2,
-                cats: files3
+                cats: files3,
+                tutorials: tutorials
             });
         }).catch(err => {
             console.log('Unable to scan directory: ' + err);
