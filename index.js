@@ -77,6 +77,8 @@ app.post('/home',(req,res)=>{
 // Notes page
 app.get('/notes/:school/:department/:year/:unit', async (req, res) => {
     const fs = (await import('fs')).promises;
+    const fs2 = (await import("fs"))
+    
     try{
         const school = req.params.school;
         const department = req.params.department;
