@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config();
 import express, { json } from 'express'
 import path from 'path'
 
@@ -17,6 +19,7 @@ app.set('viewengine','ejs')
 app.use(express.static('public'));
 app.use(express.static('notes'));
 app.use(express.static('icons'));
+
 // To parse req.body
 app.use(express.urlencoded({extended: true}))
 
@@ -45,18 +48,14 @@ app.get('/signUp',(req,res)=>{
 app.post('/signUp',(req,res)=>{
     let username = req.body.username
     let password = req.body.password
-    let year = req.body.year
-    let sem = req.body.sem
-    let school = req.body.school
-    let department = req.body.department
-    let course = req.body.course
+    let email = req.body.email
 
     try{
         db.addUser(username,password,year,sem,school,department,course)
         console.log(`User ${username} successfuly added to the system`)
         res.redirect('/')
     }catch(e){
-        res.send(e)
+        res.redirect('/')
     }
 })
 
@@ -78,19 +77,15 @@ app.post('/home',(req,res)=>{
 app.get('/notes/:school/:department/:year/:unit', async (req, res) => {
     const fs = (await import('fs')).promises;
     const fs2 = (await import("fs"))
-    
+
     try{
         const school = req.params.school;
         const department = req.params.department;
         const year = req.params.year;
         const unit = req.params.unit;
 
-        // const test = `notes/${school}/${department}/${year}/${unit}`
-
         const notes = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/classNotes`);
-        // console.log(notes)
         const exams = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/exams`);
-        // console.log(exams)
         const cats = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/cats`);
 
         
