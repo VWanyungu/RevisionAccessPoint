@@ -12,7 +12,8 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
     ({request}) => request.destination === 'script' || request.destination === 'style',
-    new workbox.strategies.StaleWhileRevalidate()
+    // new workbox.strategies.StaleWhileRevalidate()
+    new workbox.strategies.NetworkFirst()
 )
 
 workbox.routing.registerRoute(

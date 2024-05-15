@@ -14,20 +14,6 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 let users = [
     {
         name: "John",
@@ -61,14 +47,15 @@ let users = [
 
 export {login, addUser}
 
-function login(name,password){
-    let user = users.find(user => user.name == name && user.password == password)
-    if(user){
-        return true
-    }
-    else {
-        return false
-    }
+function login(email,password){
+    // let user = users.find(user => user.name == name && user.password == password)
+    // if(user){
+    //     return true
+    // }
+    // else {
+    //     return false
+    // }
+    return true
 }
 
 function addUser(name,password,year,sem,school,department,course){

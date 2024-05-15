@@ -3,6 +3,11 @@ config();
 import express, { json } from 'express'
 import path from 'path'
 
+import axios from "axios"
+import FormData from "form-data"
+import fs2 from "fs"
+
+
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -29,10 +34,10 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/', (req,res)=>{
-    let username = req.body.username
+    let email = req.body.email
     let password = req.body.password
 
-    if(db.login(username,password)){
+    if(db.login(email,password)){
         res.redirect('/home')
     }else{
         res.redirect('/')
@@ -147,12 +152,9 @@ app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
 
 })
 
-// Quiz page
-app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>{
-    const axios = (await import("axios"))
-    const FormData = (await import("form-data"))
-    const fs2 = (await import("fs"))
 
+// Quiz page
+app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
     const school = req.params.school
     const department = req.params.department
     const year = req.params.year
@@ -264,30 +266,33 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file', async (req,res)=>
 
     try{
         
-        await chatPdf(filePath);
-        await question();
-    
-        // Getting rid of non-question response from the AI
-        finalResult.pop()
-        finalResult.shift()
-    
-        let answers = []
-        let questions = []
-    
-        // Getting answers and questions to make them availbale in the scoring post route 
-        finalResult.forEach((q)=>{
-            answers.push(q.answer)
-            //removing special characters, in order for the questions to be passed as a parameter in the post route
-            let temp = q.question
-            temp = temp.replace(/[?,/]/g, '')
-            questions.push(temp)
-        })
-    
-        let scoreRouteAnswers = JSON.stringify(answers)
-        let scoreRouteQuestions = JSON.stringify(questions)
-    
-        res.render('quiz.ejs',{finalResult, backPath, path, unit, scoreRouteAnswers, scoreRouteQuestions,})
+        async function load(){
+            await chatPdf(filePath);
+            await question();
+        }
 
+        load().then(()=>{
+             // Getting rid of non-question response from the AI
+                finalResult.pop()
+                finalResult.shift()
+            
+                let answers = []
+                let questions = []
+            
+                // Getting answers and questions to make them availbale in the scoring post route 
+                finalResult.forEach((q)=>{
+                    answers.push(q.answer)
+                    //removing special characters, in order for the questions to be passed as a parameter in the post route
+                    let temp = q.question
+                    temp = temp.replace(/[?,/]/g, '')
+                    questions.push(temp)
+                })
+            
+                let scoreRouteAnswers = JSON.stringify(answers)
+                let scoreRouteQuestions = JSON.stringify(questions)
+            
+                res.render('quiz.ejs',{finalResult, backPath, path, unit, scoreRouteAnswers, scoreRouteQuestions,})
+            })
     }catch(error){
         console.log(error)
         res.redirect(backPath)
