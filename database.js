@@ -6,68 +6,40 @@ const supabaseUrl = 'https://ptktlornnngqvzbbisaq.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 
+export {login, signUp}
 
+// Insert users
+async function signUp(name, email, password){
+    const { data, error } = await supabase
+    .from('Users')
+    .insert([
+        { name: `${name}`, email: `${email}`, password: `${password}` },
+    ])
 
-
-
-
-
-
-
-let users = [
-    {
-        name: "John",
-        password: "1234",
-        year: 2,
-        sem: 2,
-        school: "Computing and informatics",
-        department: "Computer Science",
-        course: "Computer Science"
-    },
-    {
-        name: "John Doe",
-        password: "1234",
-        year: 2,
-        sem: 2,
-        school: "Computing and informatics",
-        department: "Computer Science",
-        course: "Computer Science"
-    },
-    {
-        name: "admin",
-        password: "admin",
-        year: 2,
-        sem: 2,
-        school: "Computing and informatics",
-        department: "Computer Science",
-        course: "Computer Science"
-    },
-
-]
-
-export {login, addUser}
-
-function login(email,password){
-    // let user = users.find(user => user.name == name && user.password == password)
-    // if(user){
-    //     return true
-    // }
-    // else {
-    //     return false
-    // }
-    return true
+    if (error) {
+        console.error('Error inserting data:', error)
+    } else {
+        console.log('Data inserted successfully:', data)
+        return true
+    }
 }
 
-function addUser(name,password,year,sem,school,department,course){
-    users.push({
-        name: name,
-        password: password,
-        year: year,
-        sem: sem,
-        school: school,
-        department: department,
-        course: course
-    })
+// Login: checking whether the user exists in the database
+async function login (email, password){
+    const { data, error } = await supabase
+    .from('Users')
+    .select()
+    .eq('email', email)
+    .eq('password', password)
+
+    if (error) {
+        console.error('Error fetching data:', error)
+    } else {
+        console.log(`Data fetched successfully: ${email}`,)
+        
+    }
 }
 
+// signUp("Doe", "john@gmail.com", "1234")
+// login("john@gmail", "1234")
 

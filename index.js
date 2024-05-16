@@ -56,11 +56,11 @@ app.post('/signUp',(req,res)=>{
     let email = req.body.email
 
     try{
-        db.addUser(username,password,year,sem,school,department,course)
+        db.signUp(username, email, password)
         console.log(`User ${username} successfuly added to the system`)
         res.redirect('/')
     }catch(e){
-        res.redirect('/')
+        res.redirect('/signUp')
     }
 })
 
