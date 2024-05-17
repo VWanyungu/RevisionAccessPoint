@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 config();
 import express, { json } from 'express'
 import path from 'path'
+import swal from 'sweetalert';
 
 import axios from "axios"
 import FormData from "form-data"
@@ -16,6 +17,7 @@ const __dirname = dirname(__filename);
 
 // Access to database and database functions
 import * as db from './database.js'
+import * as test from './test.js'
 
 const app = express();
 app.set('viewengine','ejs')
@@ -30,19 +32,26 @@ app.use(express.urlencoded({extended: true}))
 
 // Login page
 app.get('/',(req,res)=>{
-    res.render('index.ejs')
+    let message = req.query.message
+    // console.log(message)
+    res.render('index.ejs',{message})
 })
 
-app.post('/', (req,res)=>{
-    let email = req.body.email
-    let password = req.body.password
-
-    if(db.login(email,password)){
-        res.redirect('/home')
-    }else{
+app.post('/', async (req,res)=>{
+    if(!req.body){
         res.redirect('/')
+    }else {
+        let email = req.body.email
+        let password = req.body.password
+    
+        const loginStatus = await db.login(email,password)
+        console.log(loginStatus)
+        if(loginStatus){
+            res.redirect('/home')
+        }else {
+            res.redirect('/?message=' + encodeURIComponent("User does not exist"));
+        }
     }
-
 })
 
 // Sign up page
@@ -50,17 +59,27 @@ app.get('/signUp',(req,res)=>{
     res.render('signUp.ejs')
 })
 
-app.post('/signUp',(req,res)=>{
-    let username = req.body.username
-    let password = req.body.password
-    let email = req.body.email
-
-    try{
-        db.signUp(username, email, password)
-        console.log(`User ${username} successfuly added to the system`)
-        res.redirect('/')
-    }catch(e){
+app.post('/signUp',async (req,res)=>{
+    if(!req.body){
         res.redirect('/signUp')
+    }else{
+        let username = req.body.signUpName
+        let password = req.body.signUpPassword
+        let email = req.body.signUpEmail
+
+        console.log(req.body)
+
+        try{
+            await db.signUp(username, email, password)
+            console.log(`User ${username} successfuly added to the system`)
+
+            // let message = "User successfully added to the system"
+            res.redirect('/?message=' + encodeURIComponent("User already exists"));
+            // res.redirect('/')
+        }catch(e){
+            console.log(e)
+            res.redirect('/signUp')
+        }
     }
 })
 

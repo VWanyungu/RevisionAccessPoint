@@ -31,12 +31,13 @@ async function login (email, password){
     .select()
     .eq('email', email)
     .eq('password', password)
+    
 
     if (error) {
         console.error('Error fetching data:', error)
     } else {
-        console.log(`Data fetched successfully: ${email}`,)
-        
+        console.log(`Data fetched successfully: ${data[0].email}`,)
+        return true
     }
 }
 
