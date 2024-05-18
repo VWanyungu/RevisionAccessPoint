@@ -26,6 +26,7 @@ app.set('viewengine','ejs')
 app.use(express.static('public'));
 app.use(express.static('notes'));
 app.use(express.static('icons'));
+app.use(express.static('.well-known'));
 
 // To parse req.body
 app.use(express.urlencoded({extended: true}))
@@ -57,7 +58,8 @@ app.post('/', async (req,res)=>{
 
 // Sign up page
 app.get('/signUp',(req,res)=>{
-    res.render('signUp.ejs')
+    let message = req.query.message
+    res.render('signUp.ejs',{message})
 })
 
 app.post('/signUp',async (req,res)=>{
@@ -72,14 +74,11 @@ app.post('/signUp',async (req,res)=>{
 
         try{
             await db.signUp(username, email, password)
-            console.log(`User ${username} successfuly added to the system`)
-
-            // let message = "User successfully added to the system"
             res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
             // res.redirect('/')
         }catch(e){
             console.log(e)
-            res.redirect('/signUp')
+            res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
         }
     }
 })
