@@ -49,6 +49,7 @@ app.post('/', async (req,res)=>{
         if(loginStatus){
             res.redirect('/home')
         }else {
+            // The message query parameter is used to display a message to the user
             res.redirect('/?message=' + encodeURIComponent("User does not exist"));
         }
     }
@@ -74,7 +75,7 @@ app.post('/signUp',async (req,res)=>{
             console.log(`User ${username} successfuly added to the system`)
 
             // let message = "User successfully added to the system"
-            res.redirect('/?message=' + encodeURIComponent("User already exists"));
+            res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
             // res.redirect('/')
         }catch(e){
             console.log(e)

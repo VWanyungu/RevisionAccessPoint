@@ -84,7 +84,7 @@
                                         <a href=""><center><img src="icons8-google.svg" alt="" width="30px" height="30px"></center></a>
                                     </div>
                                 </div>
-                                <h6 class="h6 text-muted mt-3">Back to <a class="text-muted" href="/signUp"><strong style="text-decoration: underline;">Sign up</strong></a></h6>
+                                <h6 class="h6 text-muted mt-3">Back to <a class="text-muted" href="/signUp" id="signUpLink"><strong style="text-decoration: underline;">Sign up</strong></a></h6>
                                 <h6 style="font-size: 12px; color: darkgray;">icons by <a href="https://icons8.com/" style="color: darkgray;">icons8</a></h6>
                             </div>
                         </form>
@@ -95,6 +95,7 @@
         </div>
     <!-- </div> -->
 
+    <!-- If the message is in the route query -->
     <% if (message) { %>
         <script>
             function display(){
@@ -102,9 +103,27 @@
                 swal(display);
             }
 
+            // To ensure the alert is displayed only once
+            // Once the browser is closed
             if (!sessionStorage.getItem('firstLoadDone')) {
                 window.onload = display()
                 sessionStorage.setItem('firstLoadDone', 'true');
+            }
+
+            // Clearing the session storage when the redirect happens
+            let loginForm = document.getElementById("loginForm")
+            let signUpLink = document.getElementById("signUpLink")
+
+            loginForm.onsubmit = function(){
+                if (sessionStorage.getItem('firstLoadDone')) {
+                    sessionStorage.removeItem('firstLoadDone');
+                }
+            }
+
+            signUpLink.onclick = function(){
+                if (sessionStorage.getItem('firstLoadDone')) {
+                    sessionStorage.removeItem('firstLoadDone');
+                }
             }
 
             
