@@ -25,13 +25,13 @@ let schoolDepUnits = [
             {
                 year: 'Year_2.2',
                 unitNames: [
-                    'Data_structures_and_algorithms',
-                    'Research_methods',
-                    'Client_server_computing',
-                    'Database_systems',
-                    'Logic_programming',
-                    'Principles_of_OS',
-                    'Web_programming'
+                    'Data structures and algorithms',
+                    'Research methods',
+                    'Client server computing',
+                    'Database systems',
+                    'Logic programming',
+                    'Principles of OS',
+                    'Web programming'
                 ]
             }
         ]
@@ -81,7 +81,7 @@ function getUnits(yearValue,schoolValue, departmentValue) {
     let unit = schoolDepUnit.units.find(unit => unit.year === yearValue)
     unit.unitNames.forEach(unit => {
         unitSelect.innerHTML += `
-            <option value="${unit}">${unit.replaceAll("_"," ")}</option>
+            <option value="${unit.replaceAll(" ","_")}">${unit}</option>
         `
     })
 }
