@@ -20,11 +20,11 @@ let schools = [
 let schoolDepUnits = [
     {
         school: 'SCI', //foreign key
-        department: 'Computer Science',
+        department: 'Computer_Science',
         units: [
             {
                 year: 'Year_2.2',
-                units: [
+                unitNames: [
                     'Data_structures_and_algorithms',
                     'Research_methods',
                     'Client_server_computing',
@@ -38,11 +38,11 @@ let schoolDepUnits = [
     },
     {
         school: 'SEBE', //foreign key
-        department: 'Electrical and Communications Engineering',
+        department: 'Electrical_and_Communications_Engineering',
         units: [
             {
                 year: 'Year_2.2',
-                units: [
+                unitNames: [
                     'Basic Electronics',
                     'Circuit Theory',
                     'Computer Programming',
@@ -58,7 +58,6 @@ let schoolDepUnits = [
 ]
 
 schools.forEach(school => {
-    console.log(school)
     schoolSelect.innerHTML += `
         <option value="${school.name}">${school.value}</option>
     `
@@ -71,7 +70,7 @@ function getDepartments(schoolValue) {
     departmentSelect.innerHTML = ''
     school.departments.forEach(dep => {
         departmentSelect.innerHTML += `
-            <option value="${dep}">${dep}</option>
+            <option value="${dep.replaceAll(" ","_")}">${dep}</option>
         `
     })
 }
@@ -80,7 +79,7 @@ function getUnits(yearValue,schoolValue, departmentValue) {
     unitSelect.innerHTML = ''
     let schoolDepUnit = schoolDepUnits.find(sdu => sdu.school === schoolValue && sdu.department === departmentValue)
     let unit = schoolDepUnit.units.find(unit => unit.year === yearValue)
-    unit.units.forEach(unit => {
+    unit.unitNames.forEach(unit => {
         unitSelect.innerHTML += `
             <option value="${unit}">${unit.replaceAll("_"," ")}</option>
         `
@@ -88,13 +87,13 @@ function getUnits(yearValue,schoolValue, departmentValue) {
 }
 
 schoolSelect.addEventListener('change', ()=>{
-    console.log("changed")
     getDepartments(schoolSelect.value)
 })
 
 yearSelect.addEventListener('change', (e) => {
     if (yearSelect.value != '' && schoolSelect.value != '' && departmentSelect.value != '') {
-        getUnits(year.value, schoolSelect.value, departmentSelect.value)
+        console.log(yearSelect.value, schoolSelect.value, departmentSelect.value)
+        getUnits(yearSelect.value, schoolSelect.value, departmentSelect.value)
     }
 })
 

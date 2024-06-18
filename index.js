@@ -100,6 +100,7 @@ app.get('/home',(req,res)=>{
 
 app.post('/home',(req,res)=>{
     try{
+        console.log(req.body)
         let school = req.body.school
         let department = req.body.department
         let year = req.body.year
