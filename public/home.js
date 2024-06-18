@@ -4,37 +4,98 @@ let departmentSelect = document.getElementById('department')
 let unitSelect = document.getElementById('unit')
 let warnBtn = document.getElementById('warn')
 
-if (schoolSelect.value == 'SCI') {
-    departmentSelect.innerHTML = `
-        <option value="Computer_Science" default>Computer Science</option>
-        <option value="Information Technology">Information Technology</option>
-    ` 
+let schools = [
+    {
+        name: 'SCI',
+        value: 'School of Computing and Informatics',
+        departments: ["Computer Science","IT"]
+    },
+    {
+        name: 'SEBE',
+        value: 'School of Engineering and Built Environment',
+        departments: ["Electrical and Communications Engineering"]
+    },
+]
+
+let schoolDepUnits = [
+    {
+        school: 'SCI', //foreign key
+        department: 'Computer Science',
+        units: [
+            {
+                year: 'Year_2.2',
+                units: [
+                    'Data_structures_and_algorithms',
+                    'Research_methods',
+                    'Client_server_computing',
+                    'Database_systems',
+                    'Logic_programming',
+                    'Principles_of_OS',
+                    'Web_programming'
+                ]
+            }
+        ]
+    },
+    {
+        school: 'SEBE', //foreign key
+        department: 'Electrical and Communications Engineering',
+        units: [
+            {
+                year: 'Year_2.2',
+                units: [
+                    'Basic Electronics',
+                    'Circuit Theory',
+                    'Computer Programming',
+                    'Electrical Machines',
+                    'Material Science' ,
+                    'Engineering Mathematics',
+                    'Electrical Measurements',
+                    'Thermodynamics',
+                ]
+            }
+        ]
+    }
+]
+
+schools.forEach(school => {
+    console.log(school)
+    schoolSelect.innerHTML += `
+        <option value="${school.name}">${school.value}</option>
+    `
+    getDepartments(schoolSelect.value)
+    // getUnits(year.value, schoolSelect.value, departmentSelect.value)
+})
+
+function getDepartments(schoolValue) {
+    let school = schools.find(school => school.name === schoolValue)
+    departmentSelect.innerHTML = ''
+    school.departments.forEach(dep => {
+        departmentSelect.innerHTML += `
+            <option value="${dep}">${dep}</option>
+        `
+    })
 }
 
-schoolSelect.addEventListener('change', (e) => {
-    if (schoolSelect.value == 'SCI') {
-        departmentSelect.innerHTML = `
-            <option value="Computer_Science" default>Computer Science</option>
-        ` 
-    } else if(schoolSelect.value == 'SOBE') {
-        departmentSelect.innerHTML = `
-            
-        ` 
-    }
+function getUnits(yearValue,schoolValue, departmentValue) {
+    unitSelect.innerHTML = ''
+    let schoolDepUnit = schoolDepUnits.find(sdu => sdu.school === schoolValue && sdu.department === departmentValue)
+    let unit = schoolDepUnit.units.find(unit => unit.year === yearValue)
+    unit.units.forEach(unit => {
+        unitSelect.innerHTML += `
+            <option value="${unit}">${unit.replaceAll("_"," ")}</option>
+        `
+    })
+}
+
+schoolSelect.addEventListener('change', ()=>{
+    console.log("changed")
+    getDepartments(schoolSelect.value)
 })
 
 yearSelect.addEventListener('change', (e) => {
-    if (yearSelect.value == 'Year_2.2' && schoolSelect.value == 'SCI' && departmentSelect.value == 'Computer_Science') {
-        unitSelect.innerHTML = `
-            <option value="Data_structures_and_algorithms" default>Data strcutures and algorithms</option>
-            <option value="Research_methods">Research methods</option>
-            <option value="Client_server_computing">Client server computing</option>
-            <option value="Database_systems">Database systems</option>
-            <option value="Logic_programming">Logic programming</option>
-            <option value="Principles_of_OS">Principles of Operating Systems</option>
-            <option value="Web_programming">Web programming</option>
-        ` 
-    } 
+    if (yearSelect.value != '' && schoolSelect.value != '' && departmentSelect.value != '') {
+        getUnits(year.value, schoolSelect.value, departmentSelect.value)
+    }
 })
 
 
