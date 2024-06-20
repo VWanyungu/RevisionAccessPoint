@@ -46,10 +46,10 @@ let schoolDepUnits = [
                     'Basic Electronics',
                     'Circuit Theory',
                     'Computer Programming',
-                    'Electrical Machines',
+                    'Electrical Machines 1',
                     'Material Science' ,
-                    'Engineering Mathematics',
-                    'Electrical Measurements',
+                    'Engineering Mathematics 2',
+                    'Electrical Measurements 1',
                     'Thermodynamics',
                 ]
             }
