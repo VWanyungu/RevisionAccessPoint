@@ -13,7 +13,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <!-- Ad sense -->
     <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4066811607299460" crossorigin="anonymous"></script> -->
 
@@ -21,32 +21,32 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="container-fluid p-0" style="width: 80%;">
             <div class="card mt-5 text-muted">
                 <div class="card-body m-0">
                     <div class=" mb-4 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
-                        <h4 class="h4 text-dark mb-0" style=" font-family: 'Big Shoulders Display', cursive; font-weight: bold;">Revision Access Point</h4>
+                        <h4 class="h4 text-dark mb-0" style="font-weight: bold;">Revision Access Point</h4>
                     </div>
 
                     <form action="/signUp" method="post" class="" id="signUpForm">
                         <div class="mb-3 p-2 rounded d-flex justify-content-start align-items-center" style="background-color: #f2f2f2;">
                             <i class="fa-solid fa-user text-muted me-2 ms-2"></i>
-                            <input type="text" class="flex-fill" id="signUpName" name="signUpName" placeholder="Name" style="border: none; background-color: #f2f2f2; outline: none;" required>
+                            <input type="text" class="flex-fill" id="signUpName" name="signUpName" placeholder="Name" style="border: none; background-color: #f2f2f2; outline: none; font-weight: 300;" required>
                         </div>
 
                         <div class="mb-3 p-2 rounded d-flex justify-content-start align-items-center" style="background-color: #f2f2f2;">
                             <i class="fa-solid fa-envelope text-muted me-2 ms-2"></i>
-                            <input type="text" class="flex-fill" id="signUpEmail" name="signUpEmail" placeholder="Email" style="border: none; background-color: #f2f2f2; outline: none;" required>
+                            <input type="text" class="flex-fill" id="signUpEmail" name="signUpEmail" placeholder="Email" style="border: none; background-color: #f2f2f2; outline: none; font-weight: 300;" required>
                         </div>
                         
                         <div class="mb-3 p-2 rounded d-flex justify-content-start align-items-center" style="background-color: #f2f2f2;">
                             <i class="fa-solid fa-lock text-muted me-2 ms-2"></i>
-                            <input type="password" class="flex-fill" id="signUpPassword" name="signUpPassword" placeholder="Password" style="border: none; background-color: #f2f2f2; outline: none;" required>
+                            <input type="password" class="flex-fill" id="signUpPassword" name="signUpPassword" placeholder="Password" style="border: none; background-color: #f2f2f2; outline: none; font-weight: 300;" required>
                         </div>
                         
                         <div class="">
-                            <button type="submit" class="btn bg-dark" style="width: 100%;">
+                            <button type="submit" class="btn bg-dark" style="width: 100%; ">
                                 <h6 class="h6 text-light" style="font-size: 20px;">
                                     Sign up
                                 </h6>
@@ -61,13 +61,15 @@
                                 <a href=""><center><img src="icons8-google.svg" alt="" width="30px" height="30px"></center></a>
                             </div>
                         </div> -->
-                        <h6 class="h6 text-muted mt-3">Back to <a class="text-muted" href="/"><strong style="text-decoration: underline;">Login</strong></a></h6>
+                        <h6 class="h6 text-muted mt-3" style="font-weight: 300;">Back to <a class="text-muted" href="/"><strong style="text-decoration: underline;">Login</strong></a></h6>
                         <h6 style="font-size: 12px; color: darkgray;">icons by <a href="https://icons8.com/" style="color: darkgray;">icons8</a></h6>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
     <script>
         if('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js').then(function(registration){
