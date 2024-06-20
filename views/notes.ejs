@@ -56,9 +56,9 @@
 
     <!-- Course information -->
     <div class="container-fluid mt-2">
-        <h4 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= school.replace("_"," ") %></h4>
-        <H4 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= department.replace("_"," ") %></H4>
-        <h4 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= year.replace("_"," ") %></h4>
+        <h4 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= school.replaceAll("_"," ") %></h4>
+        <H4 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= department.replaceAll("_"," ") %></H4>
+        <h4 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= year.replaceAll("_"," ") %></h4>
         <h4 class="m-0 mb-1" style="text-transform: uppercase; font-weight: 400;"><%= unit.replaceAll("_"," ") %></h4>
         <div style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 5px;"></div>
     </div>
@@ -91,7 +91,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="d-flex">
                                 <img src="/notes.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h4 class="h5 pe-2" style="color: #004aad; font-weight: 300;"><%= note.replace(".pdf"," ") %></h4>
+                                <h4 class="h5 pe-2" style="color: #004aad; font-weight: 300;"><%= note.replace(".pdf"," ").replaceAll("_"," ") %></h4>
                             </div>
                             <div class="d-flex justify-content-center align-items-center">
                                 <a href="/quiz/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=note%>" class="text-muted me-2 p-2 rounded quizLnk" style="border: 1px solid darkgray;" onclick="loadScreen()">
@@ -117,7 +117,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="d-flex">
                                 <img src="/exam3.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h4 style="color: #004aad; font-weight: 300;"><%= exam.replace(".pdf"," ") %></h4>
+                                <h4 style="color: #004aad; font-weight: 300;"><%= exam.replace(".pdf"," ").replaceAll("_"," ") %></h4>
                             </div>
                             <div class="d-flex">
                                 <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/exams/<%=encodeURIComponent(exam)%>" class="text-muted p-2 rounded" style="border: 1px solid darkgray;"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
@@ -138,7 +138,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="d-flex">
                                 <img src="/exam3.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h4 style="color: #004aad; font-weight: 300;"><%= cat.replace(".pdf"," ") %></h4>
+                                <h4 style="color: #004aad; font-weight: 300;"><%= cat.replace(".pdf"," ").replaceAll("_"," ") %></h4>
                             </div>
                             <div class="d-flex">
                                 <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/cats/<%=encodeURIComponent(cat)%>" class="text-muted p-2 rounded" style="border: 1px solid darkgray;"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
