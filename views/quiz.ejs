@@ -73,18 +73,21 @@
 
     <!-- Quiz -->
     <div class="container-fluid mt-3" >
-        <form action="/quiz<%=path%>/<%=scoreRouteAnswers%>/<%=scoreRouteQuestions%>" method="post" class="tab-content" id="pills-tabContent">
+             <form action="/quiz<%=path%>" method="post" class="tab-content" id="pills-tabContent">
             <!-- Page 1 -->
             <div class="pb-4">
                 <!-- Question -->
                 <% finalResult.forEach((result, index) => { %>
                     <div class="d-flex justify-content-between bg-light rounded p-3 mt-2">
                         <div class="d-flex flex-column">
+                            <input type="hidden" name="questions" value="<%= result.question %>">
+                            <input type="hidden" name="answers" value="<%= result.answer %>">
                             <h6 class="h6 pe-2 text-muted" style="font-weight: 300;"><%= result.question %></h6>
 
                             <% result.options.forEach((option, optionIndex) => { %>
                                 <div class="form-check p-0">
                                     <input type="radio" class="form-check-input" id="option<%=index%><%=optionIndex%>" name="question<%= index %>" value="<%= option %>">
+
                                     <label class="form-check-label text-muted h6" for="option<%=index%><%=optionIndex%>" style="font-weight: 300;"> <%= option %> </label>
                                 </div>
                             <% })%>

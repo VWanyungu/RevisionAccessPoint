@@ -255,7 +255,26 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
             messages: [
                 {
                 "role": "user",
-                "content": "Given the PDF file I provided, generate 20 multiple choice questions and their answers. Ensure that the questions are neither too hard nor too easy. Each question should have four choices, with the correct answer among them. Use information from the pdf file to generate the questions if possible.",
+                "content": `Given the PDF file I provided, generate exactly 20 multiple choice questions and their answers. Each question should have four choices, with the correct answer clearly indicated. The questions should be of moderate difficulty, using information from the PDF file. Ensure there are no duplicate questions or answers, and that each answer provided is one of the four choices listed. 
+                
+                Please provide the questions in the following format:
+
+                1. What is the purpose of the 'do...while' loop in C programming?
+                A) It is used when a loop condition is tested at the beginning of each loop pass.
+                B) It is used when a loop condition is tested at the end of each loop pass.
+                C) It is used when a loop condition is never tested.
+                D) It is used when a loop condition is tested randomly.
+                Answer: B) It is used when a loop condition is tested at the end of each loop pass.
+
+                2. In a 'for' loop, what does the initialization part do?
+                A) Sets the initial value of the loop control variable
+                B) Determines whether the loop will repeat
+                C) Defines the amount by which the loop control variable will change
+                D) None of the above
+                Answer: A) Sets the initial value of the loop control variable
+
+                Note: The questions should be in the same format as the examples above.
+                `,
                 },
             ],
         };
@@ -265,6 +284,7 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
         .then((response) => {
             result = response.data.content
             console.log("Response to prompt given")
+            // console.log(result)
             toJson(result)
         })
         .catch((error) => {
@@ -329,25 +349,10 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
         load()
         .then(()=>{
              // Getting rid of non-question response from the AI
-            finalResult.pop()
-            finalResult.shift()
+            // finalResult.pop()
+            // finalResult.shift()
         
-            // Getting answers and questions to make them availbale in the scoring post route 
-            let answers = []
-            let questions = []
-            finalResult.forEach((result)=>{
-                answers.push(result.answer)
-                //removing special characters, in order for the questions to be passed as a parameter in the post route
-                let temp = result.question
-                temp = temp.replace(/[?,/]/g, '')
-                questions.push(temp)
-            })
-        
-            // To be passed in the post request route as parameters
-            let scoreRouteAnswers = JSON.stringify(answers)
-            let scoreRouteQuestions = JSON.stringify(questions)
-        
-            res.render('quiz.ejs',{finalResult, backPath, path, unit, scoreRouteAnswers, scoreRouteQuestions,})
+            res.render('quiz.ejs',{finalResult, backPath, path, unit})
         })
     }catch(error){
         console.log(`Error getting chat id or getting questions: ${error}`)
@@ -356,19 +361,17 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
     
 })
 
-app.post('/quiz/:school/:department/:year/:unit/:answers/:questions',async (req,res)=> {
+app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
     // Add options feature soon
-    // console.log(req.params.questions)
-    // console.log(req.params.answers)
+
     try{
-        const school = req.params.school
-        const department = req.params.department
-        const year = req.params.year
-        const unit = req.params.unit
-        const backPath = `/notes/${school}/${department}/${year}/${unit}`
-        const questions = JSON.parse(decodeURIComponent(req.params.questions))
-        const correctAnswers = JSON.parse(decodeURIComponent(req.params.answers)) 
-        const answers = Object.values(req.body) 
+        const {school, department, year, unit} = req.params
+        const backPath = `/notes/${school}/${department}/${year}/${unit}` 
+        const reqBody = Object.values(req.body) 
+        const questions = reqBody[0]
+        const correctAnswers = reqBody[1]
+        const answers = reqBody.slice(2)
+
         let failedQuestions = []
 
         async function getScore(){
@@ -388,7 +391,7 @@ app.post('/quiz/:school/:department/:year/:unit/:answers/:questions',async (req,
 
         let finalScore = await getScore()
 
-        res.render('quizResults.ejs',{finalScore, failedQuestions, questions, backPath, unit})
+        res.render('quizResults.ejs',{finalScore, failedQuestions,unit,questions, backPath, unit})
     }catch(err){
         console.log("Posting error" + err)
     }
