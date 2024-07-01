@@ -68,7 +68,7 @@
     <div class="container-fluid mt-3 d-flex justify-content-start align-items-center">
         <ul class="nav nav-pills  m-0" role="tablist" style="list-style: none;">
             <li class="p-1 ps-3 pe-3 me-2 rounded " style="border: 2px solid darkgray;">
-                <a class="text-muted" data-bs-toggle="pill" href="#notes" role="tab" style="text-decoration: none;">Notes</a>
+                <a class="text-muted" data-bs-toggle="pill" href="#notes" role="tab" style="text-decoration: none;" id="notesanchor">Notes</a>
             </li>
             <li class="p-1 ps-3 pe-3 me-2 rounded" style="border: 2px solid darkgray;">
                 <a class="text-muted" data-bs-toggle="pill" href="#exams" role="tab" style="text-decoration: none;">Exams</a>
@@ -179,6 +179,11 @@
     </div>
 
     <script>
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('notesanchor').click();
+        });
+
         let messages = [
             "Reading the pdf...",
             "Generating questions...",
@@ -195,17 +200,16 @@
             document.querySelector(".text h6").innerHTML = message;
         }, 5000);
 
-    </script>
-
-    <!-- MDB -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script> -->
-    <script>
         function loadScreen (){
            document.querySelector('.notes').style.display = 'none';
            document.querySelector('.load').style.display = 'block';
            document.querySelector('.text').style.display = 'block';
         }
+
     </script>
+
+    <!-- MDB -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script> -->
 
     <!-- <script src="/home.js"></script> -->
     
