@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 import express, { json } from 'express'
 import path from 'path'
-import swal from 'sweetalert';
 import axios from "axios"
 import FormData from "form-data"
 import fs2 from "fs"

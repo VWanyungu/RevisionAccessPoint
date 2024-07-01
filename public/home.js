@@ -77,8 +77,11 @@ function getDepartments(schoolValue) {
 
 function getUnits(yearValue,schoolValue, departmentValue) {
     unitSelect.innerHTML = ''
+
     let schoolDepUnit = schoolDepUnits.find(sdu => sdu.school === schoolValue && sdu.department === departmentValue)
+
     let unit = schoolDepUnit.units.find(unit => unit.year === yearValue)
+
     unit.unitNames.forEach(unit => {
         unitSelect.innerHTML += `
             <option value="${unit.replaceAll(" ","_")}">${unit}</option>
@@ -88,6 +91,14 @@ function getUnits(yearValue,schoolValue, departmentValue) {
 
 schoolSelect.addEventListener('change', ()=>{
     getDepartments(schoolSelect.value)
+    getUnits(yearSelect.value, schoolSelect.value, departmentSelect.value)
+})
+
+departmentSelect.addEventListener('change', () => {
+    if (yearSelect.value != '' && schoolSelect.value != '' && departmentSelect.value != '') {
+        console.log(yearSelect.value, schoolSelect.value, departmentSelect.value)
+        getUnits(yearSelect.value, schoolSelect.value, departmentSelect.value)
+    }
 })
 
 yearSelect.addEventListener('change', (e) => {
