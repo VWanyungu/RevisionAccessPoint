@@ -52,7 +52,13 @@ let schoolDepUnits = [
                     'Electrical Measurements 1',
                     'Thermodynamics',
                 ]
-            }
+            },
+            {
+                year: 'Year_2.3',
+                unitNames: [
+                    'Workshop Practise',
+                ]
+            },
         ]
     }
 ]
