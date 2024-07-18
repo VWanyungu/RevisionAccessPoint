@@ -23,6 +23,17 @@ let schoolDepUnits = [
         department: 'Computer_Science',
         units: [
             {
+                year: 'Year_2.1',
+                unitNames: [
+                   'Computer Organization and Architecture',
+                   'Data Communication Systems',
+                   'Introduction to Artificial Intelligence',
+                   'Object Oriented Programming',
+                   'Probability and Statistics',
+                   'System Anaysis and design'
+                ]
+            },
+            {
                 year: 'Year_2.2',
                 unitNames: [
                     'Data structures and algorithms',
