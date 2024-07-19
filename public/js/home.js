@@ -79,7 +79,7 @@ schools.forEach(school => {
         <option value="${school.name}">${school.value}</option>
     `
     getDepartments(schoolSelect.value)
-    // getUnits(year.value, schoolSelect.value, departmentSelect.value)
+    getUnits(year.value, schoolSelect.value, departmentSelect.value)
 })
 
 function getDepartments(schoolValue) {
