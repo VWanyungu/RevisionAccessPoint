@@ -26,7 +26,8 @@ const keys = {
   google: {
     clientID: '644723621367-e7end2ihvlb68rdo797dh1dh570911ij.apps.googleusercontent.com',
     clientSecret: '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',
-    redirectURI: 'http://localhost:3030/auth/google/callback'
+    // redirectURI: 'http://localhost:3030/auth/google/callback'
+    redirectURI: 'https://revisionaccesspoint.onrender.com/auth/google/callback'
   }
 };
 
