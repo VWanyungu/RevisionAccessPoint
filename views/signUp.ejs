@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#044aab"/>
     <title>Revision Access Point</title>
     <link rel="icon" type="image/x-icon" href="/logo.svg">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/css/index.css">
     <link rel="manifest" href="/manifest.json">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -45,13 +45,17 @@
                             <input type="password" class="flex-fill" id="signUpPassword" name="signUpPassword" placeholder="Password" style="border: none; background-color: #f2f2f2; outline: none; font-weight: 300;" required>
                         </div>
                         
-                        <div class="">
-                            <button type="submit" class="btn bg-dark" style="width: 100%; ">
-                                <h6 class="h6 text-light" style="font-size: 20px;">
-                                    Sign up
-                                </h6>
-                            </button>
-                        </div>
+                        
+                        <button type="submit" class="mb-3 btn bg-dark" style="width: 100%; ">
+                            <h6 class="h6 text-light" style="font-size: 20px;">
+                                Sign up
+                            </h6>
+                        </button>
+
+                        <a href="/auth/google" class="mb-3 btn bg-dark text-light" style="width: 100%; font-size: 20px; font-weight: 500;" id="googleLoginBtn">
+                            <i class="fa-brands fa-google me-2"></i> Continue with google
+                        </a>
+                        
                     </form>
 
                     <div class="d-flex flex-column justify-content-center align-items-center">

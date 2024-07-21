@@ -36,7 +36,7 @@ async function login (email, password){
     if (error) {
         console.error('Error fetching data:', error)
     } else {
-        console.log(`Data fetched successfully: ${data[0].email}`,)
+        // console.log(`Data fetched successfully: ${data[0].email}`,)
         return true
     }
 }

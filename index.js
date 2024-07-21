@@ -9,17 +9,68 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 // Access to database and database functions
 import * as db from './database.js'
-
-config(); // Load environment variables
 const app = express();
+config(); // Load environment variables from .env file
 app.set('viewengine','ejs')
 app.use(express.static('public')); //CSS, JS, Images
 app.use(express.static('notes')); //PDF files
 app.use(express.static('icons')); //PWA icons
 app.use(express.static('.well-known')); 
 app.use(express.urlencoded({extended: true})) // To parse req.body
+
+import { OAuth2Client } from 'google-auth-library';
+const keys = {
+  google: {
+    clientID: '644723621367-e7end2ihvlb68rdo797dh1dh570911ij.apps.googleusercontent.com',
+    clientSecret: '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',
+    redirectURI: 'http://localhost:3030/auth/google/callback'
+  }
+};
+
+const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, keys.google.redirectURI);
+
+// Generate the URL for Google authentication
+app.get('/auth/google', (req, res) => {
+  const url = client.generateAuthUrl({
+    access_type: 'offline',
+    scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email']
+  });
+  res.redirect(url);
+});
+
+// Handle the callback after Google has authenticated the user
+app.get('/auth/google/callback', async (req, res) => {
+  const code = req.query.code;
+  const { tokens } = await client.getToken(code);
+  client.setCredentials(tokens);
+
+  const ticket = await client.verifyIdToken({
+    idToken: tokens.id_token,
+    audience: keys.google.clientID
+  });
+
+  const payload = ticket.getPayload();
+
+  const loginStatus = await db.login(payload.email,payload.sub)
+  if(loginStatus){
+    console.log("User exists")
+    res.redirect('/home')
+  }else {
+    try{
+        console.log("User does not exist")
+        await db.signUp(payload.name, payload.email, payload.sub)
+        res.redirect('/')
+      }catch(e){
+        console.log(e)
+        res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
+      }
+  }
+  
+});
+
 
 // Login page
 app.get('/',(req,res)=>{
