@@ -3,6 +3,20 @@ let yearSelect = document.getElementById('year')
 let departmentSelect = document.getElementById('department')
 let unitSelect = document.getElementById('unit')
 let warnBtn = document.getElementById('warn')
+let searchBtn = document.getElementById('searchBtn')
+let searchBtnTxt = document.querySelector('#searchBtn h6')
+let loadDiv = document.querySelector('.loadDivHome')
+let univLoad = document.getElementById("hide")
+
+searchBtn.addEventListener('click', () => {
+    searchBtnTxt.style.display = 'none'
+    loadDiv.style.display = 'block'
+})
+
+window.onload = () => {
+    console.log("All elements loaded")
+    univLoad.style.display = 'none'
+}
 
 let schools = [
     {
@@ -19,7 +33,7 @@ let schools = [
 
 let schoolDepUnits = [
     {
-        school: 'SCI', //foreign key
+        school: 'SCI', 
         department: 'Computer_Science',
         units: [
             {
@@ -48,7 +62,7 @@ let schoolDepUnits = [
         ]
     },
     {
-        school: 'SEBE', //foreign key
+        school: 'SEBE', 
         department: 'Electrical_and_Communications_Engineering',
         units: [
             {

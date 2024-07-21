@@ -29,6 +29,11 @@
     </style>
   </head>
   <body>
+    <div id="hide">
+      <div class="container-fluid bg-dark p-2 d-flex justify-content-center align-items-center" id="univLoad" style="display: none;">
+        <div class="loadDiv2"></div>
+      </div>
+    </div>
     <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
         <div class="mb-3 d-flex align-items-center justify-content-start" id="logo" style="margin-top: 10px;">
             <div>
@@ -78,6 +83,12 @@
         viewer-css-theme="LIGHT">
       </pdfjs-viewer-element>
     </div>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('hide').style.display = 'none'
+        });
+    </script>
 
     <!-- MDB -->
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script> -->

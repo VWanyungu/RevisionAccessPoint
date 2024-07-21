@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="manifest" href="/manifest.json">
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +21,12 @@
     <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4066811607299460" crossorigin="anonymous"></script> -->
   </head>
   <body>
+    <div id="hide">
+      <div class="container-fluid bg-dark p-2 d-flex justify-content-center align-items-center" id="univLoad" style="display: none;">
+        <div class="loadDiv2"></div>
+      </div>
+    </div>
+
     <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
         <div class="mb-3 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
             <div>
@@ -32,10 +39,10 @@
             </div>
         </div>
         <div>
-            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" style="position: relative; display: inline-block;">
-              <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
-            </button>
-        </div>
+          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" style="position: relative; display: inline-block;">
+            <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
+          </button>
+      </div>
     </div>
     <div class="container-fluid d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
       <div class="m-0 mt-1">
@@ -163,7 +170,12 @@
           </div>
         </div> -->
 
-        <button data-mdb-ripple-init type="submit" class="btn btn-block text-light mt-2" style="margin-bottom: 100px; font-size: 20px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">Search</button>
+        <button data-mdb-ripple-init type="submit" class="btn btn-block text-light mt-2 d-flex justify-content-center align-items-center" style="margin-bottom: 100px; font-size: 20px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="searchBtn">
+          <h6 class="h6 text-light" style="font-size: 20px;">
+            Search
+          </h6>
+          <div class="loadDivHome" style="display: none;"></div>
+        </button>
       </form>
     </div>
 
