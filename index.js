@@ -400,8 +400,10 @@ app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
         load()
         .then(()=>{
              // Getting rid of non-question response from the AI
-            // finalResult.pop()
-            // finalResult.shift()
+            finalResult.pop()
+            finalResult.shift()
+
+            // console.log("Final Result:", finalResult)
         
             res.render('quiz.ejs',{finalResult, backPath, path, unit})
         })
@@ -423,6 +425,8 @@ app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
         const correctAnswers = reqBody[1]
         const answers = reqBody.slice(2)
 
+        // console.log({questions, correctAnswers, answers})
+
         let failedQuestions = []
 
         async function getScore(){
@@ -431,6 +435,7 @@ app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
                 if(correctAnswers[i].includes(answers[i])){
                     score++
                 }else{
+                    // console.log(`Failed answer: ${answers[i]}, correct answer: ${correctAnswers[i]}`)
                     failedQuestions.push({
                         question: questions[i],
                         answer: correctAnswers[i]
