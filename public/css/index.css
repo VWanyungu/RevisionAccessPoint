@@ -23,6 +23,22 @@ select, select option{
     animation: spin 8s linear infinite;
 }
 
+.loadDivQuiz{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    border: 5px dotted white;
+    animation: spin 8s linear infinite;
+}
+
+.loadDivQuizResults{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    border: 5px dotted white;
+    animation: spin 8s linear infinite;
+}
+
 .loadDiv2{
     height: 25px;
     width: 25px;

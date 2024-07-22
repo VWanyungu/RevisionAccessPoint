@@ -102,12 +102,18 @@
 
   <!-- Content navigation buttons -->
   <div class="container-fluid">
-    <button class="btn mt-3 mb-3 ps-3 pe-3 rounded bg-success flex-grow-1" style="padding-top: 5.5px; padding-bottom: 5.5px; text-align: center; width: 100%;">
+    <button class="d-flex justify-content-center align-items-center btn mt-3 mb-3 ps-3 pe-3 rounded bg-success flex-grow-1" style="padding-top: 5.5px; padding-bottom: 5.5px; text-align: center; width: 100%;" id="completeBtn">
       <a class="text-light h6" href="<%=backPath%>" style="text-decoration: none; font-weight: 300;">Complete review</a>
+      <div class="loadDivQuizResults" style="display: none;"></div>
     </button>
   </div>
 
   <script>
+    document.getElementById('completeBtn').addEventListener('click', function(){
+      document.querySelector('#completeBtn a').style.display = 'none';
+      document.querySelector('.loadDivQuizResults').style.display = 'block';
+    })
+
     window.addEventListener('DOMContentLoaded', (event) => {
           document.getElementById('hide').style.display = 'none'
       });
