@@ -24,10 +24,10 @@ app.use(express.urlencoded({extended: true})) // To parse req.body
 import { OAuth2Client } from 'google-auth-library';
 const keys = {
   google: {
-    clientID: '644723621367-e7end2ihvlb68rdo797dh1dh570911ij.apps.googleusercontent.com',
-    clientSecret: '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',
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
     // redirectURI: 'http://localhost:3030/auth/google/callback'
-    redirectURI: 'https://revisionaccesspoint.onrender.com/auth/google/callback'
+    redirectURI: process.env.REDIRECT_URI
   }
 };
 
