@@ -12,6 +12,7 @@ const __dirname = dirname(__filename);
 
 // Access to database and database functions
 import * as db from './database.js'
+
 const app = express();
 config(); // Load environment variables from .env file
 app.set('viewengine','ejs')
@@ -26,8 +27,8 @@ const keys = {
   google: {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    // redirectURI: 'http://localhost:3030/auth/google/callback'
-    redirectURI: process.env.REDIRECT_URI
+    redirectURI: 'http://localhost:3030/auth/google/callback'
+    // redirectURI: process.env.REDIRECT_URI
   }
 };
 
@@ -35,40 +36,49 @@ const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, 
 
 // Generate the URL for Google authentication
 app.get('/auth/google', (req, res) => {
-  const url = client.generateAuthUrl({
-    access_type: 'offline',
-    scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email']
-  });
-  res.redirect(url);
+    console.log("Authenticating via google...")
+    const url = client.generateAuthUrl({
+        access_type: 'offline',
+        scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email']
+    });
+    res.redirect(url);
 });
 
 // Handle the callback after Google has authenticated the user
 app.get('/auth/google/callback', async (req, res) => {
-  const code = req.query.code;
-  const { tokens } = await client.getToken(code);
-  client.setCredentials(tokens);
+    console.log("Callback from google...")
 
-  const ticket = await client.verifyIdToken({
-    idToken: tokens.id_token,
-    audience: keys.google.clientID
-  });
+    const code = req.query.code;
+    const { tokens } = await client.getToken(code);
+    client.setCredentials(tokens);
 
-  const payload = ticket.getPayload();
+    const ticket = await client.verifyIdToken({
+        idToken: tokens.id_token,
+        audience: keys.google.clientID
+    });
 
-  const loginStatus = await db.login(payload.email,payload.sub)
-  if(loginStatus){
-    console.log("User exists")
-    res.redirect('/home')
-  }else {
-    try{
-        console.log("User does not exist")
-        await db.signUp(payload.name, payload.email, payload.sub)
-        res.redirect('/')
-      }catch(e){
-        console.log(e)
-        res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
-      }
-  }
+    const payload = ticket.getPayload();
+
+    console.log("1. Payload loaded: " + payload.email)
+
+    const loginStatus = await db.checkUser(payload.email)
+
+    console.log("2. User email exists: [true | false] " + loginStatus)
+
+    if(loginStatus){
+        res.redirect('/?message=' + encodeURIComponent("User exists. Please login."))
+    }else if(!loginStatus){ 
+        try{
+            const signUpStatus = await db.signUp(payload.name, payload.email, payload.sub)
+            console.log("3. User sign up successful: " + payload.email)
+            res.redirect('/home')
+        }catch(e){
+            console.log(e)
+            res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
+        }
+    }else{
+        res.redirect('/?message=' + encodeURIComponent("An error ocurred. Please try again."))
+    }
   
 });
 
@@ -96,6 +106,7 @@ app.post('/', async (req,res)=>{
             if(loginStatus){
                 res.redirect('/home')
             }else {
+                console.log(loginStatus)
                 // The message query parameter is used to display a message to the user
                 res.redirect('/?message=' + encodeURIComponent("User does not exist"));
             }
@@ -123,12 +134,13 @@ app.post('/signUp',async (req,res)=>{
             let username = req.body.signUpName
             let password = req.body.signUpPassword
             let email = req.body.signUpEmail
-    
-            console.log(req.body)
-    
             try{
-                await db.signUp(username, email, password)
-                res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
+                let signUpstatus = await db.signUp(username, email, password)
+                if(!signUpstatus){
+                    res.redirect('/?message=' + encodeURIComponent("User exists. Please login."))
+                }else{
+                    res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
+                }
                 // res.redirect('/')
             }catch(e){
                 console.log(e)
