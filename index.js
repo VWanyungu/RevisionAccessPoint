@@ -66,7 +66,13 @@ app.get('/auth/google/callback', async (req, res) => {
     console.log("2. User email exists: [true | false] " + loginStatus)
 
     if(loginStatus){
-        res.redirect('/?message=' + encodeURIComponent("User exists. Please login."))
+        const loginStatus2 = await db.login(payload.email, payload.sub)
+        if(loginStatus2){
+            console.log("3. User login successful: " + payload.email)
+            res.redirect('/home')
+        }else{
+            res.redirect('/?message=' + encodeURIComponent("Password does not match. Please try again."))
+        }
     }else if(!loginStatus){ 
         try{
             const signUpStatus = await db.signUp(payload.name, payload.email, payload.sub)
