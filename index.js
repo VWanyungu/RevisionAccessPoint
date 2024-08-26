@@ -48,8 +48,8 @@ const keys = {
   google: {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    redirectURI: 'http://localhost:3030/auth/google/callback'
-    // redirectURI: process.env.REDIRECT_URI
+    // redirectURI: 'http://localhost:3030/auth/google/callback'
+    redirectURI: process.env.REDIRECT_URI
   }
 };
 
