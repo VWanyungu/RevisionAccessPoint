@@ -58,6 +58,12 @@ let schoolDepUnits = [
                     'Principles of OS',
                     'Web programming'
                 ]
+            },
+            {
+                year: 'Year_2.3',
+                unitNames: [
+                    'Database',
+                ]
             }
         ]
     },

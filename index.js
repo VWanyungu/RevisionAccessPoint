@@ -1,34 +1,55 @@
 import { config } from 'dotenv';
+config()
 import express, { json } from 'express'
 import path from 'path'
 import axios from "axios"
 import FormData from "form-data"
 import fs2 from "fs"
+import { OAuth2Client } from 'google-auth-library';
+import * as db from './database.js'
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Access to database and database functions
-import * as db from './database.js'
+// Route handlers
+import homeHandler from './routes/home.js'
+import loginHandler from './routes/login.js'
+import signUpHandler from './routes/signUp.js'
+import notesHandler from './routes/notes.js'
+import pdfHandler from './routes/pdf.js'
+import quizHandler from './routes/quiz.js'
 
 const app = express();
-config(); // Load environment variables from .env file
-app.set('viewengine','ejs')
+
+app.set('view engine','ejs')
 app.use(express.static('public')); //CSS, JS, Images
 app.use(express.static('notes')); //PDF files
 app.use(express.static('icons')); //PWA icons
 app.use(express.static('.well-known')); 
+app.use(express.static('routes')); //Route handlers
 app.use(express.urlencoded({extended: true})) // To parse req.body
 
-import { OAuth2Client } from 'google-auth-library';
+app.use((req, res, next) => {
+    console.log(`Request URL: ${req.url}`);
+    next();
+});
+
+app.use('/',loginHandler)
+app.use('/signUp',signUpHandler)
+app.use('/home',homeHandler)
+app.use('/notes',notesHandler)
+app.use('/pdf',pdfHandler)
+app.use('/quiz',quizHandler)
+
 const keys = {
   google: {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    // redirectURI: 'http://localhost:3030/auth/google/callback'
-    redirectURI: process.env.REDIRECT_URI
+    redirectURI: 'http://localhost:3030/auth/google/callback'
+    // redirectURI: process.env.REDIRECT_URI
   }
 };
 
@@ -88,8 +109,7 @@ app.get('/auth/google/callback', async (req, res) => {
   
 });
 
-
-// Login page
+/*// Login page
 app.get('/',(req,res)=>{
     try{
         let message = req.query.message
@@ -471,7 +491,7 @@ app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
     }
 
     
-})
+})*/
 
 
 app.listen(3030,()=>{
