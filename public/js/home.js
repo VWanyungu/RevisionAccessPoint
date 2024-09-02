@@ -42,7 +42,7 @@ let schoolDepUnits = [
                    'Communication Skills',
                    'Differential Calculus',
                    'Discrete Structures',
-                   'Electrical Principals',
+                   'Electrical Principles',
                    'Fundamentals Of Computing',
                    'Introduction To Programming',
                    'Quantitative Skills 1'
