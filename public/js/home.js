@@ -37,6 +37,31 @@ let schoolDepUnits = [
         department: 'Computer_Science',
         units: [
             {
+                year: 'Year_1.1',
+                unitNames: [
+                   'Communication Skills',
+                   'Differential Calculus',
+                   'Discrete Structures',
+                   'Electrical Principals',
+                   'Fundamentals Of Computing',
+                   'Introduction To Programming',
+                   'Quantitative Skills 1'
+                ]
+            },
+            {
+                year: 'Year_1.2',
+                unitNames: [
+                   'Discrete Structures II',
+                   'Electronics',
+                   'HIV and AIDS Prevention and Management',
+                   'Integral Calculus',
+                   'Introduction to Internet Technologies',
+                   'Object Oriented Programming I',
+                   'Procedural Programming',
+                   'Quantitative Skills II'
+                ]
+            },
+            {
                 year: 'Year_2.1',
                 unitNames: [
                    'Computer Organization and Architecture',
@@ -144,5 +169,6 @@ yearSelect.addEventListener('change', (e) => {
         getUnits(yearSelect.value, schoolSelect.value, departmentSelect.value)
     }
 })
+
 
 
