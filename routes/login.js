@@ -1,5 +1,8 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import * as db from '../database.js'
+import { config } from 'dotenv';
+config()
 const router = express.Router();
 
 router.get('/',(req,res)=>{
@@ -19,12 +22,25 @@ router.post('/', async (req,res)=>{
             let email = req.body.email
             let password = req.body.password
         
-            const loginStatus = await db.login(email,password)
+            const userData = await db.login(email,password)
 
-            if(loginStatus){
+            if(userData){
+                const user = { "email": userData.email, "role":userData.role }
+
+                const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
+            
+                res.cookie('token', token, {
+                    httpOnly: true, // Prevents access from JavaScript
+                    sameSite: 'strict', // Prevents CSRF
+                    maxAge: 3600000 // 1 hour in milliseconds
+                });
+
+                console.log(`User logged in: ${userData.email}`)
+            
                 res.redirect('/home')
             }else {
-                console.log(loginStatus)
+                console.log(userData)
+
                 // The message query parameter is used to display a message to the user
                 res.redirect('/?message=' + encodeURIComponent("User does not exist"));
             }

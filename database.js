@@ -54,7 +54,7 @@ async function login (email, password){
     try{
         const { data, error } = await supabase
         .from('Users')
-        .select()
+        .select("*")
         .eq('email', email)
         .eq('password', password)
 
@@ -64,7 +64,7 @@ async function login (email, password){
         }else{
             if(data && data.length > 0){
                 console.log(`Data fetched successfully: ` + data[0].email)
-                return true
+                return data[0]
             }else if(data && data.length == 0){
                 console.log("User not found")
                 return false

@@ -1,7 +1,17 @@
 import express from 'express';
+import jwt from 'jsonwebtoken'
+import { config } from 'dotenv';
+config()
 const router = express.Router();
 
 router.get('/:school/:department/:year/:unit/:folder/:file', (req, res) => {
+    const token = req.cookies.token
+    if (!token) {
+        return res.render('index.ejs')
+    }
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = verified
+
     try{
         const school = req.params.school
         const department = req.params.department

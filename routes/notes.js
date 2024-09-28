@@ -1,13 +1,23 @@
-import express from 'express';
+import express from 'express'
+import jwt from 'jsonwebtoken'
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import path from 'path'
+import { config } from 'dotenv';
+config()
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename); //Current directory
 
 router.get('/:school/:department/:year/:unit', async (req, res) => {
+    const token = req.cookies.token
+    if (!token) {
+        return res.render('index.ejs')
+    }
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = verified
+
     const fs = (await import('fs')).promises;
     const fs2 = (await import("fs"))
 

@@ -1,10 +1,20 @@
 import express from 'express';
 import FormData from "form-data"
+import jwt from 'jsonwebtoken'
 import fs2 from "fs"
 import axios from "axios"
+import { config } from 'dotenv';
+config()
 const router = express.Router();
 
 router.get('/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
+    const token = req.cookies.token
+    if (!token) {
+        return res.render('index.ejs')
+    }
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = verified
+
     const school = req.params.school
     const department = req.params.department
     const year = req.params.year

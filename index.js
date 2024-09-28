@@ -1,10 +1,11 @@
 import { config } from 'dotenv';
 config()
 import express, { json } from 'express'
-import path from 'path'
-import axios from "axios"
-import FormData from "form-data"
-import fs2 from "fs"
+import cookieParser from 'cookie-parser';
+// import path from 'path'
+// import axios from "axios"
+// import FormData from "form-data"
+// import fs2 from "fs"
 import { OAuth2Client } from 'google-auth-library';
 import * as db from './database.js'
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
@@ -24,13 +25,14 @@ import quizHandler from './routes/quiz.js'
 
 const app = express();
 
-app.set('view engine','ejs')
+app.set('view engine','ejs') // Set the view engine to ejs
 app.use(express.static('public')); //CSS, JS, Images
 app.use(express.static('notes')); //PDF files
 app.use(express.static('icons')); //PWA icons
 app.use(express.static('.well-known')); 
 app.use(express.static('routes')); //Route handlers
 app.use(express.urlencoded({extended: true})) // To parse req.body
+app.use(cookieParser()) // To parse cookies
 
 app.use((req, res, next) => {
     console.log(`Request URL: ${req.url}`);
