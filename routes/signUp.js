@@ -19,6 +19,7 @@ router.post('/',async (req,res)=>{
             let username = req.body.signUpName
             let password = req.body.signUpPassword
             let email = req.body.signUpEmail
+
             try{
                 let signUpstatus = await db.signUp(username, email, password)
                 if(!signUpstatus){
@@ -26,7 +27,6 @@ router.post('/',async (req,res)=>{
                 }else{
                     res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
                 }
-                // res.redirect('/')
             }catch(e){
                 console.log(e)
                 res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))

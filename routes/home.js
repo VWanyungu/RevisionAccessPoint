@@ -6,18 +6,14 @@ const router = express.Router();
 
 router.get('/',(req,res)=>{
     console.log('GET /home route hit')
-
     const token = req.cookies.token
     if (!token) {
-        return res.render('index.ejs')
+        return res.redirect('/')
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
-
-    console.log(req.user)
-
     try{    
-        res.render('home.ejs', {user: req.user})
+        res.render('home.ejs')
     }catch(e){
         console.log(`Error loading home page: ${e}`)
     }

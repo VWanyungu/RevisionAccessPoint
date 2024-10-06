@@ -1,11 +1,7 @@
 import { config } from 'dotenv';
-config()
 import express, { json } from 'express'
+import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-// import path from 'path'
-// import axios from "axios"
-// import FormData from "form-data"
-// import fs2 from "fs"
 import { OAuth2Client } from 'google-auth-library';
 import * as db from './database.js'
 // __dirname is not available in ECS6 modules, creating an equivalent using impoirt.meta.url and url module
@@ -23,6 +19,7 @@ import notesHandler from './routes/notes.js'
 import pdfHandler from './routes/pdf.js'
 import quizHandler from './routes/quiz.js'
 
+config()
 const app = express();
 
 app.set('view engine','ejs') // Set the view engine to ejs
@@ -33,12 +30,11 @@ app.use(express.static('.well-known'));
 app.use(express.static('routes')); //Route handlers
 app.use(express.urlencoded({extended: true})) // To parse req.body
 app.use(cookieParser()) // To parse cookies
-
-app.use((req, res, next) => {
+app.use((req, res, next) => { // Middleware to log requests
     console.log(`Request URL: ${req.url}`);
     next();
 });
-
+// Route redirection
 app.use('/',loginHandler)
 app.use('/signUp',signUpHandler)
 app.use('/home',homeHandler)
@@ -54,446 +50,60 @@ const keys = {
     redirectURI: process.env.REDIRECT_URI
   }
 };
-
-const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, keys.google.redirectURI);
-
+const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, keys.google.redirectURI) 
 // Generate the URL for Google authentication
 app.get('/auth/google', (req, res) => {
     console.log("Authenticating via google...")
     const url = client.generateAuthUrl({
         access_type: 'offline',
         scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email']
-    });
-    res.redirect(url);
+    })
+    res.redirect(url)
 });
 
 // Handle the callback after Google has authenticated the user
 app.get('/auth/google/callback', async (req, res) => {
     console.log("Callback from google...")
-
     const code = req.query.code;
     const { tokens } = await client.getToken(code);
     client.setCredentials(tokens);
-
     const ticket = await client.verifyIdToken({
         idToken: tokens.id_token,
         audience: keys.google.clientID
-    });
-
+    })
     const payload = ticket.getPayload();
-
     console.log("1. Payload loaded: " + payload.email)
-
-    const loginStatus = await db.checkUser(payload.email)
-
-    console.log("2. User email exists: [true | false] " + loginStatus)
-
-    if(loginStatus){
-        const loginStatus2 = await db.login(payload.email, payload.sub)
-        if(loginStatus2){
-            console.log("3. User login successful: " + payload.email)
-            res.redirect('/home')
-        }else{
-            res.redirect('/?message=' + encodeURIComponent("Password does not match. Please try again."))
-        }
-    }else if(!loginStatus){ 
-        try{
-            const signUpStatus = await db.signUp(payload.name, payload.email, payload.sub)
-            console.log("3. User sign up successful: " + payload.email)
-            res.redirect('/home')
-        }catch(e){
-            console.log(e)
-            res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
-        }
-    }else{
-        res.redirect('/?message=' + encodeURIComponent("An error ocurred. Please try again."))
+    if(!payload){
+        return res.redirect('/?message=' + encodeURIComponent("User does not exist. Please sign up."))
     }
-  
-});
-
-/*// Login page
-app.get('/',(req,res)=>{
     try{
-        let message = req.query.message
-        res.render('index.ejs',{message})
-    }catch(e){
-        console.log(`Error loading login page: ${e}`)
-    }
-})
-
-app.post('/', async (req,res)=>{
-    try{
-        if(!req.body){
-            res.redirect('/')
-        }else {
-            let email = req.body.email
-            let password = req.body.password
-        
-            const loginStatus = await db.login(email,password)
-
-            if(loginStatus){
-                res.redirect('/home')
-            }else {
-                console.log(loginStatus)
-                // The message query parameter is used to display a message to the user
-                res.redirect('/?message=' + encodeURIComponent("User does not exist"));
+        const loginStatus = await db.login(payload.email, payload.sub)
+        if(!loginStatus){
+            res.clearCookie('token', {
+                httpOnly: true,
+                sameSite: 'lax',
+            })
+            let signUpstatus = await db.signUp(`${payload.given_name} ${payload.family_name}`, payload.email, payload.sub)
+            if(!signUpstatus){
+                return res.redirect('/?message=' + encodeURIComponent("User does not exist. Error occured during sign up."))
             }
+        }
+        const user = { "email": payload.email, "role": loginStatus.role}
+        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('token', token, {
+            httpOnly: true, // Prevents access from JavaScript
+            sameSite: 'lax', // Prevents CSRF
+            maxAge: 3600000, // 1 hour in milliseconds
+        })
+        if(res.get('Set-Cookie')){ // Check if cookie was set
+            return res.redirect('/home')
         }
     }catch(e){
         console.log(`Error posting login page: ${e}`)
-    }
-})
-
-// Sign up page
-app.get('/signUp',(req,res)=>{
-    try{
-        let message = req.query.message
-        res.render('signUp.ejs',{message})
-    }catch(e){
-        console.log(`Error loading sign up page: ${e}`)
-    }
-})
-
-app.post('/signUp',async (req,res)=>{
-    try{
-        if(!req.body){
-            res.redirect('/signUp')
-        }else{
-            let username = req.body.signUpName
-            let password = req.body.signUpPassword
-            let email = req.body.signUpEmail
-            try{
-                let signUpstatus = await db.signUp(username, email, password)
-                if(!signUpstatus){
-                    res.redirect('/?message=' + encodeURIComponent("User exists. Please login."))
-                }else{
-                    res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
-                }
-                // res.redirect('/')
-            }catch(e){
-                console.log(e)
-                res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
-            }
-        }
-    }catch(e){
-        console.log(`Error posting sign up page: ${e}`)
-    }
-})
-
-// Home page
-app.get('/home',(req,res)=>{
-    try{    
-        res.render('home.ejs')
-    }catch(e){
-        console.log(`Error loading home page: ${e}`)
-    }
-})
-
-app.post('/home',(req,res)=>{
-    try{
-        console.log(req.body)
-        let school = req.body.school
-        let department = req.body.department
-        let year = req.body.year
-        let unit = req.body.unit
-    
-        res.redirect('/notes/'+school+'/'+department+'/'+year+'/'+unit)
-    }catch(e){
-        console.log(`Error posting home page: ${e}`)
-    }
-})
-
-// Notes page
-app.get('/notes/:school/:department/:year/:unit', async (req, res) => {
-    const fs = (await import('fs')).promises;
-    const fs2 = (await import("fs"))
-
-    try{
-        const school = req.params.school;
-        const department = req.params.department;
-        const year = req.params.year;
-        const unit = req.params.unit;
-
-        const notes = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/classNotes`);
-        const exams = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/exams`);
-        const cats = path.join(__dirname, `notes/${school}/${department}/${year}/${unit}/cats`);
-
-        // Tutorials are stored in a text file, this functions reads the file, the split function returns a promise
-        let tutorials
-        function split() {
-            return new Promise((resolve, reject) => {
-                fs2.readFile(`notes/${school}/${department}/${year}/${unit}/tutorials.txt`, 'utf8', function(err, data) {
-                    if (err) {
-                        return reject(err);
-                    }
-                    tutorials = data.split('\n');
-                    resolve(tutorials.pop());
-                });
-            });
-        }
-       
-        // The pool of promises is resolved when all promises in the pool are resolved
-        Promise.all([
-            fs.readdir(notes),
-            fs.readdir(exams),
-            fs.readdir(cats),
-            split()
-        ])
-        .then(([files1, files2, files3]) => {
-            // split()
-            res.render('notes.ejs', {
-                // Paths
-                notesPath: notes,
-                examsPath: exams,
-                catsPath: cats,
-                // Data
-                school: school,
-                department: department,
-                year: year,
-                unit: unit,
-                // Actual files
-                notes: files1,
-                exams: files2,
-                cats: files3,
-                tutorials: tutorials
-            });
-        }).catch(err => {
-            console.log('Unable to scan directory: ' + err);
-            res.redirect('/home');
-        });
-    }catch(err){
-        console.log(`Error getting notes: ${err}`);
-        res.redirect('/home');
-    } 
-});
-
-// PDF page
-app.get('/pdf/:school/:department/:year/:unit/:folder/:file', (req, res) => {
-    try{
-        const school = req.params.school
-        const department = req.params.department
-        const year = req.params.year
-        const unit = req.params.unit
-        const folder = req.params.folder
-        const file = req.params.file
-        // The path is used to locate the pdf file
-        const path = `/${school}/${department}/${year}/${unit}/${folder}/${file}`
-        // The notes path is used to navigate back to the notes page
-        const notesPath = `/notes/${school}/${department}/${year}/${unit}`
-
-        res.render('pdf.ejs',{path,notesPath});
-    }catch(e){
-        console.log(`Error loading pdf page: ${e}`)
-    }
-})
-
-
-// Quiz page
-app.get('/quiz/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
-    const school = req.params.school
-    const department = req.params.department
-    const year = req.params.year
-    const unit = req.params.unit
-    const folder = req.params.folder
-    const file = req.params.file
-    const path = `/${school}/${department}/${year}/${unit}`
-    // Route to navigate back to the notes page
-    const backPath = `/notes/${school}/${department}/${year}/${unit}`
-    const filePath = `notes/${school}/${department}/${year}/${unit}/${folder}/${file}`
-
-    let srcId
-    let result
-    let finalResult
-
-    // Uploading the pdf file to the chatpdf API, creating chat id
-    async function chatPdf(path){
-        const formData = new FormData();
-        formData.append(
-        "file",fs2.createReadStream(path)
-        );
-
-        const options = {
-            headers: {
-                
-                "x-api-key": process.env.CHAT_API_KEY,
-                ...formData.getHeaders(),
-            },
-        }
-
-        return axios
-        .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
-        .then((response) => {
-            srcId = response.data.sourceId
-            console.log("Source ID generated");
-        })
-        .catch((error) => {
-            console.log("Error uploading pdf to ChatPdf:", error.message);
-            console.log("Response pdf:", error.response.data);
-        });
-    }
-
-    // Asking the question
-    async function question(){
-        const config = {
-            headers: {
-                "x-api-key": process.env.CHAT_API_KEY,
-                "Content-Type": "application/json",
-            },
-        };
-        
-        const data = {
-            sourceId: srcId,
-            messages: [
-                {
-                "role": "user",
-                "content": `Given the PDF file I provided, generate exactly 20 multiple choice questions and their answers. Each question should have four choices, with the correct answer clearly indicated. The questions should be of moderate difficulty, using information from the PDF file. Ensure there are no duplicate questions or answers, and that each answer provided is one of the four choices listed. 
-                
-                Please provide the questions in the following format:
-
-                1. What is the purpose of the 'do...while' loop in C programming?
-                A) It is used when a loop condition is tested at the beginning of each loop pass.
-                B) It is used when a loop condition is tested at the end of each loop pass.
-                C) It is used when a loop condition is never tested.
-                D) It is used when a loop condition is tested randomly.
-                Answer: B) It is used when a loop condition is tested at the end of each loop pass.
-
-                2. In a 'for' loop, what does the initialization part do?
-                A) Sets the initial value of the loop control variable
-                B) Determines whether the loop will repeat
-                C) Defines the amount by which the loop control variable will change
-                D) None of the above
-                Answer: A) Sets the initial value of the loop control variable
-
-                Note: The questions should be in the same format as the examples above.
-                `,
-                },
-            ],
-        };
-        
-        return axios
-        .post("https://api.chatpdf.com/v1/chats/message", data, config)
-        .then((response) => {
-            result = response.data.content
-            console.log("Response to prompt given")
-            // console.log(result)
-            toJson(result)
-        })
-        .catch((error) => {
-            console.error("Error asking question:", error.message);
-            console.log("Response question:", error.response.data);
-        });
-    }
-
-    // Formatting response to give an array of objects of questions, options and answers
-    function toJson(sampleData){
-        try{
-            if (sampleData === undefined) {
-                throw new Error("No data found");
-            }
-
-            // Splitting the data into questions
-            // After every 2 \n escape sequences, a new question begins
-            var questions = sampleData.split('\n\n').filter(function(item) {
-                return item.trim().length > 0;
-            });
-            
-            // ------ The structure of each question from above is:
-            // --question \n
-            // ----option1 \n
-            // ----option2 \n
-            // ----option3 \n
-            // --answer \n
-
-            // Getting Answers and options for each question
-            var mcqData = [];
-            questions.forEach(function(question) {
-                // Splitting after every \n escape sequence
-                var lines = question.split('\n'); 
-                var qData = {
-                    // First line is the question, last line is the answer
-                    question: lines[0].trim(),
-                    options: [],
-                    answer: lines[lines.length - 1].trim()
-                };
-                // Options are between the question and the answer
-                for (var i = 1; i < lines.length - 1; i++) {
-                    qData.options.push(lines[i].trim());
-                }
-                mcqData.push(qData);
-            });
-        
-            let display = JSON.stringify(mcqData)
-            finalResult = JSON.parse(display)
-            console.log("Sample Result:", finalResult[1])
-        }catch(error){
-            console.log(error.message)
-        }
-    
-    }
-
-    try{
-        async function load(){
-            await chatPdf(filePath);
-            await question();
-        }
-
-        load()
-        .then(()=>{
-             // Getting rid of non-question response from the AI
-            finalResult.pop()
-            finalResult.shift()
-
-            // console.log("Final Result:", finalResult)
-        
-            res.render('quiz.ejs',{finalResult, backPath, path, unit})
-        })
-    }catch(error){
-        console.log(`Error getting chat id or getting questions: ${error}`)
-        res.redirect(backPath)
+        return res.redirect('/signUp?message=' + encodeURIComponent("An error occurred. Please try again."))
     }
     
 })
-
-app.post('/quiz/:school/:department/:year/:unit',async (req,res)=> {
-    // Add options feature soon
-
-    try{
-        const {school, department, year, unit} = req.params
-        const backPath = `/notes/${school}/${department}/${year}/${unit}` 
-        const reqBody = Object.values(req.body) 
-        const questions = reqBody[0]
-        const correctAnswers = reqBody[1]
-        const answers = reqBody.slice(2)
-
-        // console.log({questions, correctAnswers, answers})
-
-        let failedQuestions = []
-
-        async function getScore(){
-            let score = 0
-            for(let i = 0; i < answers.length; i++){
-                if(correctAnswers[i].includes(answers[i])){
-                    score++
-                }else{
-                    // console.log(`Failed answer: ${answers[i]}, correct answer: ${correctAnswers[i]}`)
-                    failedQuestions.push({
-                        question: questions[i],
-                        answer: correctAnswers[i]
-                    })
-                }
-            }
-            return score
-        }
-
-        let finalScore = await getScore()
-
-        res.render('quizResults.ejs',{finalScore, failedQuestions,unit,questions, backPath, unit})
-    }catch(err){
-        console.log("Posting error" + err)
-    }
-
-    
-})*/
 
 
 app.listen(3030,()=>{

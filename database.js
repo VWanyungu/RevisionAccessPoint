@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { config } from 'dotenv';
+import bcrypt from 'bcrypt'
 export {login, signUp, checkUser}
 config();
 const supabaseUrl = process.env.SUPABASE_URL
@@ -15,64 +16,58 @@ if(supabase){
 // Insert users
 async function signUp(name, email, password){
     try{
+        if(await checkUser(email)){
+            return false
+        }
+
+        const saltRounds = 10
+        let hash = await bcrypt.hash(password, saltRounds)
+        if(!hash){
+            console.error('\nError hashing signUp data')
+            return false
+        }
         const { data, error } = await supabase
         .from('Users')
-        .select()
-        .eq('email', email)
-        // .eq('password', password)
-
-        if(error) {
-            console.error('Error fetching data:', error)
+        .insert([
+            { name: `${name}`, email: `${email}`, password: `${hash}`},
+        ])
+        if (error) {
+            console.error('\nError inserting data during signUp:', error)
             return false
-        }else{
-            if(data && data.length > 0){
-                console.log(`User already exists: ` + data[0].email)
-                return false
-            }else if(data && data.length == 0){
-                const { data, error } = await supabase
-                .from('Users')
-                .insert([
-                    { name: `${name}`, email: `${email}`, password: `${password}`},
-                ])
-                if (error) {
-                    console.error('Error inserting data:', error)
-                } else {
-                    console.log('Data inserted successfully: ' + email)
-                    return true
-                }
-            }
-        }  
+        }
+        console.log('\nSignUp successful: ' + email)
+        return true
     }catch(e){
-        console.log("Error in signUp")
-        console.log(e)
+        console.log("\nError in signUp: " + e)
         return false
     }
 }
 
-// Login: checking whether the user exists in the database
 async function login (email, password){
     try{
         const { data, error } = await supabase
         .from('Users')
         .select("*")
         .eq('email', email)
-        .eq('password', password)
-
         if(error) {
-            console.error('Error fetching data:', error)
+            console.error('\nError fetching data during login:', error)
             return false
-        }else{
-            if(data && data.length > 0){
-                console.log(`Data fetched successfully: ` + data[0].email)
-                return data[0]
-            }else if(data && data.length == 0){
-                console.log("User not found")
-                return false
-            }
         }
+        if(data && data.length == 0){
+            console.log("\nUser not found during login")
+            return false
+        }
+        console.log(`\nLogin data fetched successfully: ` + data[0].email)
+
+        let passwordMatch = await bcrypt.compare(password, data[0].password)
+        if(!passwordMatch){
+            console.log("\nLogin password incorrect")
+            return false
+        }
+        console.log("\nLogin successful")
+        return data[0]
     }catch(e){
-        console.log("Error in login")
-        console.log(e)
+        console.log("\nError in login: " + e)
         return false
     }
 }
@@ -85,24 +80,24 @@ async function checkUser (email){
         .eq('email', email)
 
         if(error) {
-            console.error('Error checking data:', error)
+            console.error('\n Error checking email in database: ', error)
             return false
         }else{
             if(data && data.length > 0){
-                console.log(`User exists: ` + data[0].email)
+                console.log(`\nEmail exists`)
                 return true
             }else if(data && data.length == 0){
-                console.log("User does not exist")
+                console.log("\nEmail does not exist")
                 return false
             }
         }
     }catch(e){
-        console.log("Error in checking user")
-        console.log(e)
+        console.log("\nError checking email: " + e)
         return false
     }
 }
 
 // signUp("Doe", "john@gmail.com", "1234")
-// login("john@gmail", "1234")
+// login("john@gmail.com", "1234")
+// login("doe2@gmail.com", "1234")
 
