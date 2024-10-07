@@ -9,8 +9,9 @@ const router = express.Router();
 
 router.get('/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
     const token = req.cookies.token
+    let message
     if (!token) {
-        return res.render('index.ejs')
+        return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified
@@ -170,30 +171,28 @@ router.get('/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
 
             // console.log("Final Result:", finalResult)
         
-            res.render('quiz.ejs',{finalResult, backPath, path, unit})
+            res.render('quiz.ejs',{finalResult, backPath, path, unit, message})
         })
     }catch(error){
         console.log(`Error getting chat id or getting questions: ${error}`)
-        res.redirect(backPath)
+        return res.redirect(`${backPath}?message=${encodeURIComponent("Error generating quiz")}`)
     }
     
 })
 
 router.post('/:school/:department/:year/:unit',async (req,res)=> {
     // Add options feature soon
-
+    let message
+    const {school, department, year, unit} = req.params 
+    const backPath = `/notes/${school}/${department}/${year}/${unit}`
     try{
-        const {school, department, year, unit} = req.params
-        const backPath = `/notes/${school}/${department}/${year}/${unit}` 
         const reqBody = Object.values(req.body) 
         const questions = reqBody[0]
         const correctAnswers = reqBody[1]
         const answers = reqBody.slice(2)
 
         // console.log({questions, correctAnswers, answers})
-
         let failedQuestions = []
-
         async function getScore(){
             let score = 0
             for(let i = 0; i < answers.length; i++){
@@ -209,15 +208,12 @@ router.post('/:school/:department/:year/:unit',async (req,res)=> {
             }
             return score
         }
-
         let finalScore = await getScore()
-
-        res.render('quizResults.ejs',{finalScore, failedQuestions,unit,questions, backPath, unit})
+        res.render('quizResults.ejs',{finalScore, failedQuestions,unit,questions, backPath, unit, message})
     }catch(err){
         console.log("Posting error" + err)
+        return res.redirect(`${backPath}?message=${encodeURIComponent("Error calculating results")}`)
     }
-
-    
 })
 
 export default router;

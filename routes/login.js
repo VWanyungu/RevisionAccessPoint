@@ -1,6 +1,5 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import bycrypt from 'bcrypt';
 import * as db from '../database.js'
 import { config } from 'dotenv';
 config()
@@ -10,8 +9,7 @@ router.get('/',(req,res)=>{
     try{
         res.clearCookie('token', {
             httpOnly: true,
-            sameSite: 'strict',
-            path: '/'
+            sameSite: 'lax',
         });
 
         let message = req.query.message
@@ -22,15 +20,15 @@ router.get('/',(req,res)=>{
 })
 
 router.post('/', async (req,res)=>{
-    if(!req.body){
-        res.redirect('/')
-    }
     try{
         let email = req.body.email
         let password = req.body.password
+        if(!req.body || email == "" || password == ""){
+            return res.redirect('/?message=' + encodeURIComponent("Fill in all the details"))
+        }
         const userData = await db.login(email,password)
         if(!userData){
-            res.redirect('/?message=' + encodeURIComponent("User does not exist"));
+            res.redirect('/?message=' + encodeURIComponent("Email or password is wrong"));
         }
         const user = { "email": userData.email, "role":userData.role }
         const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -39,7 +37,7 @@ router.post('/', async (req,res)=>{
             sameSite: 'strict', // Prevents CSRF
             maxAge: 3600000, // 1 hour in milliseconds
         })
-        res.redirect('/home')
+        res.redirect('/home?message=' + encodeURIComponent("Login successful"))
     }catch(e){
         console.log(`Error posting login page: ${e}`)
     }

@@ -12,8 +12,9 @@ const __dirname = dirname(__filename); //Current directory
 
 router.get('/:school/:department/:year/:unit', async (req, res) => {
     const token = req.cookies.token
+    let message = req.query.message
     if (!token) {
-        return res.render('index.ejs')
+        return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified
@@ -67,15 +68,17 @@ router.get('/:school/:department/:year/:unit', async (req, res) => {
                 notes: files1,
                 exams: files2,
                 cats: files3,
-                tutorials: tutorials
+                tutorials: tutorials,
+                // message
+                message: message
             });
         }).catch(err => {
             console.log('Unable to scan directory: ' + err);
-            res.redirect('/home');
+            res.redirect('/home?message=' + encodeURIComponent("Unable to scan directory"));
         });
     }catch(err){
         console.log(`Error getting notes: ${err}`);
-        res.redirect('/home');
+        res.redirect('/home?message=' + encodeURIComponent("Error getting notes"))
     } 
 });
 

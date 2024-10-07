@@ -13,27 +13,26 @@ router.get('/',(req,res)=>{
 
 router.post('/',async (req,res)=>{
     try{
-        if(!req.body){
-            res.redirect('/')
-        }else{
-            let username = req.body.signUpName
-            let password = req.body.signUpPassword
-            let email = req.body.signUpEmail
-
-            try{
-                let signUpstatus = await db.signUp(username, email, password)
-                if(!signUpstatus){
-                    res.redirect('/?message=' + encodeURIComponent("User exists. Please login."))
-                }else{
-                    res.redirect('/?message=' + encodeURIComponent("User successfully added to the system"));
-                }
-            }catch(e){
-                console.log(e)
-                res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
+        let username = req.body.signUpName
+        let password = req.body.signUpPassword
+        let email = req.body.signUpEmail
+        if(!req.body || email == "" || password == "" || username == ""){
+            return res.redirect('/signUp?message=' + encodeURIComponent("Fill in all the details"))
+        }
+        try{
+            let signUpstatus = await db.signUp(username, email, password)
+            if(!signUpstatus){
+                res.redirect('/signUp?message=' + encodeURIComponent("User exists. Please login."))
+            }else{
+                res.redirect('/?message=' + encodeURIComponent("Sign up successful"));
             }
+        }catch(e){
+            console.log(e)
+            res.redirect('/signUp?message=' + encodeURIComponent("An error ocurred. Please try again."))
         }
     }catch(e){
         console.log(`Error posting sign up page: ${e}`)
+        return res.redirect('/signUp?message=' + encodeURIComponent("An error occured"))
     }
 })
 
