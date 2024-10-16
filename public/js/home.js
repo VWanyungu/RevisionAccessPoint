@@ -93,13 +93,13 @@ let schoolDepUnits = [
             {
                 year: 'Year_3.1',
                 unitNames: [
-                    'Advanced_Java',
-                    'Automata_Theory',
-                    'Computer_Networks',
-                    'Database_II',
-                    'Design_and_Analysis_Algorithms',
-                    'Network_Programming',
-                    'Software_Engineering',
+                    'Advanced Java',
+                    'Automata Theory',
+                    'Computer Networks',
+                    'Database II',
+                    'Design and Analysis Algorithms',
+                    'Network Programming',
+                    'Software Engineering',
                 ]
             }
         ]
