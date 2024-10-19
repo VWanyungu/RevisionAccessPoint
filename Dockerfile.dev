@@ -1,0 +1,7 @@
+FROM node:slim
+ENV NODE_ENV development
+WORKDIR /RevisionAccessPoint
+COPY . .
+RUN npm install --verbose
+CMD ["node", "index.js"]
+EXPOSE 3000
