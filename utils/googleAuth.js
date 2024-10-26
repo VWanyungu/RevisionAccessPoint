@@ -10,8 +10,8 @@ const keys = {
     google: {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        redirectURI: 'http://localhost:3000/auth/google/callback'
-        // redirectURI: process.env.REDIRECT_URI
+        // redirectURI: 'http://localhost:3000/auth/google/callback'
+        redirectURI: process.env.REDIRECT_URI
     }
 }
 const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, keys.google.redirectURI) 
