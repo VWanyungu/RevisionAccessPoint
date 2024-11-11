@@ -23,6 +23,7 @@ config()
 const app = express();
 
 app.set('view engine','ejs') // Set the view engine to ejs
+// app.set('view cache',true) // Set the view engine to ejs
 app.use(express.static('public')); //CSS, JS, Images
 app.use(express.static('notes')); //PDF files
 app.use(express.static('icons')); //PWA icons
