@@ -104,7 +104,7 @@
                                 </a>
 
                                 <!-- <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=encodeURIComponent(note)%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;"> -->
-                                <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=encodeURIComponent(note)%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
+                                <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%= encodeURIComponent(noteUrls[note])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                 </a>
                             </div>

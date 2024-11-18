@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken'
+import axios from 'axios';
 import { config } from 'dotenv';
 config()
 const router = express.Router();
@@ -12,25 +13,19 @@ router.get('/:school/:department/:year/:unit/:folder/:file', (req, res) => {
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified
-    let school 
-    let department 
-    let year 
-    let unit 
-    let folder 
-    let file 
     try{
-        school = req.params.school
-        department = req.params.department
-        year = req.params.year
-        unit = req.params.unit
-        folder = req.params.folder
-        file = req.params.file
+        const { school, department, year, unit, folder, file } = req.params;
         // The path is used to locate the pdf file
-        const path = `/${school}/${department}/${year}/${unit}/${folder}/${file}`
+        // const path = `/${school}/${department}/${year}/${unit}/${folder}/${file}`
+
         // The notes path is used to navigate back to the notes page
         const notesPath = `/notes/${school}/${department}/${year}/${unit}`
 
-        res.render('pdf.ejs',{path,notesPath, message});
+        res.render('pdf.ejs', {
+            notesPath,
+            message,
+            file
+        });
     }catch(e){
         console.log(`Error loading pdf page: ${e}`)
         return res.redirect('/notes/'+school+'/'+department+'/'+year+'/'+unit+'?message=' + encodeURIComponent("Error loading the pdf. Please try again"))

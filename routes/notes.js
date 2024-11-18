@@ -33,67 +33,28 @@ async function listFiles(bucketName, path) {
 }
 
 // Helper function to read tutorial file content
-// async function readTutorials(bucketName, path) {
-//     try {
-//       // First check if file exists
-//       const { data: fileExists } = await supabase.storage
-//         .from(bucketName)
-//         .list(path.split('/').slice(0, -1).join('/'));
-  
-//       const fileName = path.split('/').pop();
-//       if (!fileExists?.some(file => file.name === fileName)) {
-//         console.log(`No tutorials file found at ${path}`);
-//         return [];
-//       }
-  
-//       // Download the file
-//       const { data, error } = await supabase.storage
-//         .from(bucketName)
-//         .download(path);
-  
-//       if (error) {
-//         console.error('Error downloading file:', error);
-//         throw error;
-//       }
-  
-//       // Handle the blob data
-//       if (!data) {
-//         console.log('No data received from storage');
-//         return [];
-//       }
-  
-//       // Convert blob to text
-//       const text = await data.text();
-      
-//       // Split by newlines and filter out empty lines
-//       const tutorials = text
-//         .split('\n')
-//         .map(line => line.trim())
-//         .filter(line => line.length > 0);
-  
-//       console.log(`Tutorials in ${path}:`, tutorials);
-//       return tutorials;
-//     } catch (error) {
-//       console.error(`Error reading tutorials file:`, error);
-//       throw error;
-//     }
-//   }
 
 // Helper function to get signed URLs for all files in a directory
 async function getSignedUrlsForFiles(bucketName, path, files) {
   const signedUrls = {};
   for (const file of files) {
     const filePath = `${path}/${file}`;
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .createSignedUrl(filePath, 3600);
+    // console.log(`Creating signed URL for ${filePath}...`);
+    // const { data, error } = await supabase.storage
+    //   .from(bucketName)
+    //   .createSignedUrl(filePath, 3600);
     
-    if (error) {
-      console.error(`Error creating signed URL for ${filePath}:`, error);
-      continue;
-    }
+    const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath)
+
+    console.log(data.publicUrl)
     
-    signedUrls[file] = data.signedUrl;
+    // if (error) {
+    //   console.error(`Error creating signed URL for ${filePath}:`, error);
+    //   continue;
+    // }
+    
+    signedUrls[file] = data.publicUrl
+    // console.log(`Signed URL for ${filePath}:`, data.signedUrl);
   }
   return signedUrls;
 }
@@ -151,6 +112,23 @@ router.get('/:school/:department/:year/:unit', async (req, res) => {
       getSignedUrlsForFiles(bucketName, catsPath, catFiles)
     ]);
 
+console.log({
+    // File data with signed URLs
+    notes: noteFiles,
+    exams: examFiles,
+    cats: catFiles,
+    noteUrls,
+    examUrls,
+    catUrls,
+    tutorials,
+    // Path information
+    school,
+    department,
+    year,
+    unit,
+    // Message
+    message
+  })
     res.render('notes.ejs', {
       // File data with signed URLs
       notes: noteFiles,

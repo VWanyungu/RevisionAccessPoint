@@ -3469,6 +3469,9 @@ const PDFViewerApplication = {
 {
   const HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io"];
   var validateFileURL = function (file) {
+    const ALLOWED_FILE_ORIGINS = [
+      'https://ptktlornnngqvzbbisaq.supabase.co',
+    ];
     if (!file) {
       return;
     }
@@ -3478,7 +3481,7 @@ const PDFViewerApplication = {
         return;
       }
       const fileOrigin = new URL(file, window.location.href).origin;
-      if (fileOrigin !== viewerOrigin) {
+      if (!ALLOWED_FILE_ORIGINS.includes(fileOrigin)) {
         throw new Error("file origin does not match viewer's");
       }
     } catch (ex) {
