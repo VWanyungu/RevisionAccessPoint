@@ -31,7 +31,7 @@ app.use(express.static('public',{ //CSS, JS, Images
 app.use(express.static('icons')); //PWA icons
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
 app.use(cookieParser())
-app.use(helmet()); // Adds various HTTP headers for security
+// app.use(helmet()); // Adds various HTTP headers for security
 app.use(morgan('common'));
 app.use(compression()); // Compress responses
 app.use(timeout('5s')); // Request for timeout after specified time
