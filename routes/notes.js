@@ -15,7 +15,7 @@ const supabase = createClient(
 // Helper function to list files in a Supabase storage path
 async function listFiles(bucketName, path) {
   try {
-    console.log(`Listing files in bucket: ${bucketName} and path: ${path}...`);
+    // console.log(`Listing files in bucket: ${bucketName} and path: ${path}...`);
     const { data, error } = await supabase.storage
       .from(bucketName)
       .list(path);
@@ -46,7 +46,7 @@ async function getSignedUrlsForFiles(bucketName, path, files) {
     
     const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath)
 
-    console.log(data.publicUrl)
+    // console.log(data.publicUrl)
     
     // if (error) {
     //   console.error(`Error creating signed URL for ${filePath}:`, error);

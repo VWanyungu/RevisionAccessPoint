@@ -2,6 +2,7 @@
 
 **Initialization:**
 
+* import SupabaseUpload from "../utils/supabaseStorage.js"
 * SupabaseUpload class constructor takes an argument of a configuration object
 
         const uploadManager = new SupabaseUpload({

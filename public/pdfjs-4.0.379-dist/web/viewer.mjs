@@ -3482,6 +3482,7 @@ const PDFViewerApplication = {
       }
       const fileOrigin = new URL(file, window.location.href).origin;
       if (!ALLOWED_FILE_ORIGINS.includes(fileOrigin)) {
+        console.log(`file origin: ${fileOrigin}`);
         throw new Error("file origin does not match viewer's");
       }
     } catch (ex) {
