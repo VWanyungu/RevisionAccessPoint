@@ -37,7 +37,7 @@ app.use(compression()); // Compress responses
 app.use(timeout('5s')); // Request for timeout after specified time
 app.use(haltOnTimedout); // Middleware to halt on timeout
 app.use(cors({ // CORS management
-    origin: process.env.ALLOWED_ORIGINS?.split(','),
+    origin: process.env.ALLOWED_ORIGINS,
     credentials: true
 }));
 app.use(rateLimit({ // Rate limiting
