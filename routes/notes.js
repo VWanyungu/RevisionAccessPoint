@@ -112,23 +112,23 @@ router.get('/:school/:department/:year/:unit', async (req, res) => {
       getSignedUrlsForFiles(bucketName, catsPath, catFiles)
     ]);
 
-console.log({
-    // File data with signed URLs
-    notes: noteFiles,
-    exams: examFiles,
-    cats: catFiles,
-    noteUrls,
-    examUrls,
-    catUrls,
-    tutorials,
-    // Path information
-    school,
-    department,
-    year,
-    unit,
-    // Message
-    message
-  })
+// console.log({
+//     // File data with signed URLs
+//     notes: noteFiles,
+//     exams: examFiles,
+//     cats: catFiles,
+//     noteUrls,
+//     examUrls,
+//     catUrls,
+//     tutorials,
+//     // Path information
+//     school,
+//     department,
+//     year,
+//     unit,
+//     // Message
+//     message
+//   })
     res.render('notes.ejs', {
       // File data with signed URLs
       notes: noteFiles,

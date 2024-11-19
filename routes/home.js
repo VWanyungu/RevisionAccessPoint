@@ -5,23 +5,21 @@ config()
 const router = express.Router();
 
 router.get('/',(req,res)=>{
-    console.log('GET /home route hit')
     const token = req.cookies.token
     let message = req.query.message
     if (!token) {
-        return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
+        return res.status(200).redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
     try{    
-        res.render('home.ejs',{message})
+        res.status(200).render('home.ejs',{message})
     }catch(e){
         console.log(`Error loading home page: ${e}`)
     }
 })
 
 router.post('/',(req,res)=>{
-    console.log('POST /home route hit')
     try{
         let school = req.body.school
         let department = req.body.department

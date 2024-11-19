@@ -17,7 +17,7 @@ const keys = {
 const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, keys.google.redirectURI) 
 // Generate the URL for Google authentication
 router.get('/', (req, res) => {
-    console.log("Authenticating via google...")
+    // console.log("Authenticating via google...")
     const url = client.generateAuthUrl({
         access_type: 'offline',
         scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email']
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/callback', async (req, res) => {
-    console.log("Callback from google...")
+    // console.log("Callback from google...")
     const code = req.query.code;
     const { tokens } = await client.getToken(code);
     client.setCredentials(tokens);
@@ -35,7 +35,7 @@ router.get('/callback', async (req, res) => {
         audience: keys.google.clientID
     })
     const payload = ticket.getPayload();
-    console.log("1. Payload loaded: " + payload.email)
+    // console.log("1. Payload loaded: " + payload.email)
     if(!payload){
         return res.redirect('/?message=' + encodeURIComponent("User does not exist. Please sign up."))
     }
