@@ -1,11 +1,12 @@
 import express from 'express';
 import jwt from 'jsonwebtoken'
 import axios from 'axios';
+import cache from '../utils/cache.js';
 import { config } from 'dotenv';
 config()
 const router = express.Router();
 
-router.get('/:school/:department/:year/:unit/:folder/:file', (req, res) => {
+router.get('/:school/:department/:year/:unit/:folder/:file',cache(),(req, res) => {
     const token = req.cookies.token
     let message = req.query.message
     if (!token) {

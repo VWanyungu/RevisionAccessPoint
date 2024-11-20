@@ -19,15 +19,30 @@ import pdfHandler from './routes/pdf.js'
 import quizHandler from './routes/quiz.js'
 import googleAuthHandler from './utils/googleAuth.js'
 
-app.set('view engine','ejs') // Set the view engine to ejs
-app.use(express.static('public',{ //CSS, JS, Images
+const staticFileCaching = { 
     maxAge: '1d',
     setHeaders: (res, path) => {
         if (path.endsWith('.css') || path.endsWith('.js')) {
             res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
         }
     }
-})); 
+}
+
+const corsConfig = { 
+    origin: process.env.ALLOWED_ORIGINS,
+    credentials: true
+}
+
+const rateLimitConfig = rateLimit({
+    windowMs: 24 * 60 * 60 * 1000, // 24 hrs in milliseconds
+    max: 100,
+    message: 'You have exceeded the 100 requests in 24 hrs limit!', 
+    standardHeaders: true,
+    legacyHeaders: false,
+})
+
+app.set('view engine','ejs') // Set the view engine to ejs
+app.use(express.static('public', staticFileCaching)); 
 app.use(express.static('icons')); //PWA icons
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
 app.use(cookieParser())
@@ -35,17 +50,8 @@ app.use(cookieParser())
 app.use(morgan('common'));
 app.use(compression()); // Compress responses
 app.use(timeout('10s')); // Request for timeout after specified time
-app.use(cors({ // CORS management
-    origin: process.env.ALLOWED_ORIGINS,
-    credentials: true
-}));
-app.use(rateLimit({
-    windowMs: 24 * 60 * 60 * 1000, // 24 hrs in milliseconds
-    max: 100,
-    message: 'You have exceeded the 100 requests in 24 hrs limit!', 
-    standardHeaders: true,
-    legacyHeaders: false,
-}));
+app.use(cors(corsConfig));
+app.use(rateLimitConfig);
 
 // Route redirection
 app.use('/',loginHandler)
@@ -56,18 +62,17 @@ app.use('/pdf',pdfHandler)
 app.use('/quiz',quizHandler)
 app.use('/auth/google', googleAuthHandler)
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok' });
-});
-
-// Error handling
 app.use((err, req, res, next) => {
     if (req.timedout) {
         res.redirect('/home?message=' + encodeURIComponent("Request timed out. Please try again"));
     } else {
         next(err);
     }
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
 });
 
 const port = process.env.PORT || 3000

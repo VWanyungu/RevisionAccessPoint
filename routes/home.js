@@ -1,10 +1,11 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
+import cache from '../utils/cache.js';
 config()
 const router = express.Router();
 
-router.get('/',(req,res)=>{
+router.get('/',cache(),(req,res)=>{
     const token = req.cookies.token
     let message = req.query.message
     if (!token) {

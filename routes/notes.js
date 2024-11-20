@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { createClient } from '@supabase/supabase-js';
+import cache from '../utils/cache.js';
 import { config } from 'dotenv';
 config();
 
@@ -59,7 +60,7 @@ async function getSignedUrlsForFiles(bucketName, path, files) {
   return signedUrls;
 }
 
-router.get('/:school/:department/:year/:unit', async (req, res) => {
+router.get('/:school/:department/:year/:unit',cache(),async (req, res) => {
   const token = req.cookies.token;
   let message = req.query.message;
   
