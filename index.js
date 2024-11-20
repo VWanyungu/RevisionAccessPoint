@@ -40,11 +40,13 @@ app.use(cors({ // CORS management
     origin: process.env.ALLOWED_ORIGINS,
     credentials: true
 }));
-
-// app.use(rateLimit({ // Rate limiting
-//     windowMs: 15 * 60 * 1000, // 15 minutes
-//     max: 100 // limit each IP to 100 requests per windowMs
-// }));
+app.use(rateLimit({
+    windowMs: 24 * 60 * 60 * 1000, // 24 hrs in milliseconds
+    max: 100,
+    message: 'You have exceeded the 100 requests in 24 hrs limit!', 
+    standardHeaders: true,
+    legacyHeaders: false,
+}));
 
 // Route redirection
 app.use('/',loginHandler)
