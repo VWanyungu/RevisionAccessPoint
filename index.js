@@ -34,16 +34,17 @@ app.use(cookieParser())
 // app.use(helmet()); // Adds various HTTP headers for security
 app.use(morgan('common'));
 app.use(compression()); // Compress responses
-app.use(timeout('5s')); // Request for timeout after specified time
+app.use(timeout('20s')); // Request for timeout after specified time
 app.use(haltOnTimedout); // Middleware to halt on timeout
 app.use(cors({ // CORS management
     origin: process.env.ALLOWED_ORIGINS,
     credentials: true
 }));
-app.use(rateLimit({ // Rate limiting
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
-}));
+
+// app.use(rateLimit({ // Rate limiting
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     max: 100 // limit each IP to 100 requests per windowMs
+// }));
 
 // Route redirection
 app.use('/',loginHandler)

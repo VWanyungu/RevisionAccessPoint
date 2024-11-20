@@ -25,36 +25,33 @@ router.get('/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
     const path = `/${school}/${department}/${year}/${unit}`
     // Route to navigate back to the notes page
     const backPath = `/notes/${school}/${department}/${year}/${unit}`
-    const filePath = `notes/${school}/${department}/${year}/${unit}/${folder}/${file}`
+    // const filePath = `notes/${school}/${department}/${year}/${unit}/${folder}/${file}` // for direct file upload
 
     let srcId
     let result
     let finalResult
 
     // Uploading the pdf file to the chatpdf API, creating chat id
-    async function chatPdf(path){
-        const formData = new FormData();
-        formData.append(
-        "file",fs2.createReadStream(path)
-        );
+    async function chatPdf(fileUrl){
+        const data = {
+            url: fileUrl,
+        };
 
         const options = {
             headers: {
-                
                 "x-api-key": process.env.CHAT_API_KEY,
-                ...formData.getHeaders(),
             },
         }
 
         return axios
-        .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
+        .post("https://api.chatpdf.com/v1/sources/add-url", data, options) //use https://api.chatpdf.com/v1/sources/add-file for file upload
         .then((response) => {
             srcId = response.data.sourceId
             console.log("Source ID generated");
         })
         .catch((error) => {
             console.log("Error uploading pdf to ChatPdf:", error.message);
-            console.log("Response pdf:", error.response.data);
+            // console.log("Response pdf:", error.response.data);
         });
     }
 
@@ -159,7 +156,7 @@ router.get('/:school/:department/:year/:unit/:folder/:file',async (req,res)=>{
 
     try{
         async function load(){
-            await chatPdf(filePath);
+            await chatPdf(file);
             await question();
         }
 
