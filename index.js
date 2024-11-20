@@ -34,8 +34,7 @@ app.use(cookieParser())
 // app.use(helmet()); // Adds various HTTP headers for security
 app.use(morgan('common'));
 app.use(compression()); // Compress responses
-app.use(timeout('20s')); // Request for timeout after specified time
-app.use(haltOnTimedout); // Middleware to halt on timeout
+app.use(timeout('10s')); // Request for timeout after specified time
 app.use(cors({ // CORS management
     origin: process.env.ALLOWED_ORIGINS,
     credentials: true
@@ -62,12 +61,14 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
 });
 
-function haltOnTimedout(req, res, next) {
-    if (!req.timedout) 
-        next();
-    else
+// Error handling
+app.use((err, req, res, next) => {
+    if (req.timedout) {
         res.redirect('/home?message=' + encodeURIComponent("Request timed out. Please try again"));
-}
+    } else {
+        next(err);
+    }
+});
 
 const port = process.env.PORT || 3000
 app.listen(port,()=>{
