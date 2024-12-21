@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit'
 import timeout from 'connect-timeout';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import client from 'prom-client'
 config()
 const app = express();
 
@@ -18,6 +19,25 @@ import notesHandler from './routes/notes.js'
 import pdfHandler from './routes/pdf.js'
 import quizHandler from './routes/quiz.js'
 import googleAuthHandler from './utils/googleAuth.js'
+
+// Register default metrics (CPU, memory, garbage collection, etc.)
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics(); // Collect metrics every 5 seconds
+
+// Create a custom counter metric
+const requestCounter = new client.Counter({
+    name: 'http_requests_total',
+    help: 'Total number of HTTP requests received',
+    labelNames: ['method', 'route', 'status_code'],
+});
+  
+// Create a custom histogram to track request durations
+const requestDuration = new client.Histogram({
+    name: 'http_request_duration_seconds',
+    help: 'Histogram for tracking request duration in seconds',
+    labelNames: ['method', 'route', 'status_code'],
+    buckets: [0.1, 0.5, 1, 1.5, 2, 5], // Buckets for response time (seconds)
+});
 
 const staticFileCaching = { 
     maxAge: '1d',
@@ -36,6 +56,9 @@ const corsConfig = {
 const rateLimitConfig = rateLimit({
     windowMs: 24 * 60 * 60 * 1000, // 24 hrs in milliseconds
     max: 100,
+    // handler: (req, res, /*next*/) => {
+    //     res.redirect('/?message=' + encodeURIComponent("You have exceeded the 100 requests in 24 hrs limit!"));
+    // },
     message: 'You have exceeded the 100 requests in 24 hrs limit!', 
     standardHeaders: true,
     legacyHeaders: false,
@@ -49,9 +72,9 @@ app.use(cookieParser())
 // app.use(helmet()); // Adds various HTTP headers for security
 app.use(morgan('common'));
 app.use(compression()); // Compress responses
-app.use(timeout('10s')); // Request for timeout after specified time
+app.use(timeout('60s')); // Request for timeout after specified time
 app.use(cors(corsConfig));
-app.use(rateLimitConfig);
+// app.use(rateLimitConfig);
 
 // Route redirection
 app.use('/',loginHandler)
@@ -61,6 +84,16 @@ app.use('/notes',notesHandler)
 app.use('/pdf',pdfHandler)
 app.use('/quiz',quizHandler)
 app.use('/auth/google', googleAuthHandler)
+
+// Middleware to track metrics
+app.use((req, res, next) => {
+    const end = requestDuration.startTimer({ method: req.method, route: req.path });
+    res.on('finish', () => {
+      end({ status_code: res.statusCode });
+      requestCounter.inc({ method: req.method, route: req.path, status_code: res.statusCode });
+    });
+    next();
+});
 
 app.use((err, req, res, next) => {
     if (req.timedout) {
@@ -75,7 +108,14 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
 });
 
+// Endpoint to expose metrics
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+});
+
 const port = process.env.PORT || 3000
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`)
+    console.log(`Metrics exposed on ${port}/metrics`);
 })
