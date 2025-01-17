@@ -1,6 +1,6 @@
 let loginBtn = document.getElementById("loginBtn")
 let loginTxt = document.querySelector("#loginBtn h6")
-let loadDiv = document.querySelector(".load")
+let loadDiv = document.querySelector(".loadDiv")
 let loginForm = document.getElementById("loginForm")
 let seePassword = document.getElementById("seePass")
 let passEl = document.getElementById("password")
@@ -10,7 +10,7 @@ loginForm.addEventListener("submit", login)
 function login(){
     loginBtn.disabled = true;
     loginTxt.style.display = "none"
-    loadDiv.style.display = "block"
+    loadDiv.style.display = "flex"
 
     setTimeout(() => {
         loginBtn.removeAttribute('disabled');
