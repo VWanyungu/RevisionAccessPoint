@@ -7,20 +7,13 @@
 #     static_configs:
 #       - targets: ['localhost:3000'] # Your Node.js app metrics endpoint
 
-# remote_write:
-#   - url: https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push
-#     basic_auth:
-#       username: 1895692
-#       password: glc_eyJvIjoiMTI3MDczMCIsIm4iOiJzdGFjay0xMDg5MzUwLWFsbG95LXJhcDIiLCJrIjoiVXAzbDc4M1Q4MXlEbnE2eDliN3lTOG9wIiwibSI6eyJyIjoicHJvZC11cy1lYXN0LTAifX0=
-
-
 global:
   scrape_interval: 15s
 remote_write:
   - url: https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push
     basic_auth:
-      username: 1895692
-      password: glc_eyJvIjoiMTI3MDczMCIsIm4iOiJzdGFjay0xMDg5MzUwLWFsbG95LXJhcDMiLCJrIjoiRE04Mm1RN096STV5dDNWUDMzcFpTMTAzIiwibSI6eyJyIjoicHJvZC11cy1lYXN0LTAifX0=
+      username: 
+      password: 
 scrape_configs:
   - job_name: node
     static_configs:
