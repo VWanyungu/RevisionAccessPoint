@@ -3,6 +3,8 @@ testing/
 
 data/
 
+prometheus.yml
+
 # Logs
 logs
 *.log
