@@ -67,8 +67,8 @@
                                     Login 
                                 </h6>
                                 <div class="loadDiv container d-flex flex-column align-items-center justify-content-center" >
-                                    <div class="load bg-dark" style="display: none;">
-                                        <div class="load2 bg-dark">
+                                    <div class="load" style="display: none;">
+                                        <div class="load2">
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
     <!-- Service worker registration -->
     <script>
         if('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js').then(function(registration){
+            navigator.serviceWorker.register('/js/service-worker.js').then(function(registration){
                 console.log('Service Worker registered');
             }).catch(function(error){
                 console.log('Service Worker registration failed:', error);

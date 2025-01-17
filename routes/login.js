@@ -1,11 +1,12 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as db from '../database.js'
+import cache from '../utils/cache.js';
 import { config } from 'dotenv';
 config()
 const router = express.Router();
 
-router.get('/',(req,res)=>{
+router.get('/',cache(),(req,res)=>{
     try{
         res.clearCookie('token', {
             httpOnly: true,

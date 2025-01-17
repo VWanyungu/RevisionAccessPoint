@@ -35,7 +35,7 @@ async function signUp(name, email, password){
             console.error('\nError inserting data during signUp:', error)
             return false
         }
-        console.log('\nSignUp successful: ' + email)
+        // console.log('\nSignUp successful: ' + email)
         return true
     }catch(e){
         console.log("\nError in signUp: " + e)
@@ -57,14 +57,14 @@ async function login (email, password){
             console.log("\nUser not found during login")
             return false
         }
-        console.log(`\nLogin data fetched successfully: ` + data[0].email)
+        // console.log(`\nLogin data fetched successfully: ` + data[0].email)
 
         let passwordMatch = await bcrypt.compare(password, data[0].password)
         if(!passwordMatch){
             console.log("\nLogin password incorrect")
             return false
         }
-        console.log("\nLogin successful")
+        // console.log("\nLogin successful")
         return data[0]
     }catch(e){
         console.log("\nError in login: " + e)
@@ -84,10 +84,10 @@ async function checkUser (email){
             return false
         }else{
             if(data && data.length > 0){
-                console.log(`\nEmail exists`)
+                // console.log(`\nEmail exists`)
                 return true
             }else if(data && data.length == 0){
-                console.log("\nEmail does not exist")
+                // console.log("\nEmail does not exist")
                 return false
             }
         }
