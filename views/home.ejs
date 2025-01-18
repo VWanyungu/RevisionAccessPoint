@@ -42,24 +42,23 @@
       </div>
     </div>
 
-    <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
+    <div class="" id="nav" style="width: 100vw; position: relative; background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
+      <div class="container d-flex align-items-center justify-content-between">
         <div class="mb-3 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
-            <div>
-                <h1 class="h1 text-light mb-0" style="font-size: 25px; font-weight: bold;">RAP</h1>
-                <!-- <div class="container d-flex flex-row align-items-center justify-content-start m-0 p-0">
-                    <h1 class="h1 text-light m-0" style="font-size: 25px; font-weight: bold;">Point</h1>
-                    <div class="ms-1" style="background-color: white; height: 25px; width: 85px;">
-                    </div>
-                </div> -->
-            </div>
+          <div>
+              <h1 class="h1 text-light mb-0" style="font-size: 25px; font-weight: bold;">RAP</h1>
+          </div>
         </div>
         <div>
-          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" style="position: relative; display: inline-block;">
+          <a href="/" class="text-light nav-link" style="font-size: 17px; text-decoration: none;"><i class="fa fa-sign-out text-light me-0" aria-hidden="true"></i> | Sign out</a>
+          <!-- <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" style="position: relative; display: inline-block;">
             <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
-          </button>
+          </button> -->
+        </div>
       </div>
     </div>
-    <div class="container-fluid d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
+
+    <!-- <div class="container-fluid d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
       <div class="m-0 mt-1">
         <div class="container collapse navbar-collapse" id="collapsibleNavbar" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
           <ul class="navbar-nav">
@@ -69,118 +68,123 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="container-fluid mt-2 p-1">
-      <div class="d-flex align-items-start">
-        <img src="/resources/exam3.svg" alt="" width="50px" height="50px" class="me-2">
-        <div>
-          <h5 style="text-transform: uppercase; color: #ff3131;" class="m-0">exams</h5>
-          <h5 class="two">Access exams done in previous years</h5>
+    <div class="container d-flex justify-content-center align-items-center flex-column" id="mainHomeContentDiv" style="width: 30%;">
+
+      <div class="mt-2 p-1" style="width: 100%;">
+        <div class="d-flex align-items-start">
+          <img src="/resources/exam3.svg" alt="" width="50px" height="50px" class="me-2">
+          <div>
+            <h5 style="text-transform: uppercase; color: #ff3131;" class="m-0">exams</h5>
+            <h5 class="two">Access exams done in previous years</h5>
+          </div>
+        </div>
+        <div class="d-flex align-items-start mt-2">
+          <img src="/resources/notes.svg" alt="" width="50px" height="50px" class="me-2">
+          <div>
+            <h5 style="text-transform: uppercase; color: #004aad;" class="m-0">notes</h5>
+            <h5 class="two">Access notes by lecturers and recommended content</h5>
+          </div>
+        </div>
+        <div class="d-flex align-items-start mt-2">
+          <img src="/resources/tutorials2.svg" alt="" width="50px" height="50px" class="me-2">
+          <div>
+            <h5 style="text-transform: uppercase; color: #ff3131;" class="m-0">tutorials</h5>
+            <h5 class="two">Access tutorials by lectures and students</h5>
+          </div>
         </div>
       </div>
-      <div class="d-flex align-items-start mt-2">
-        <img src="/resources/notes.svg" alt="" width="50px" height="50px" class="me-2">
-        <div>
-          <h5 style="text-transform: uppercase; color: #004aad;" class="m-0">notes</h5>
-          <h5 class="two">Access notes by lecturers and recommended content</h5>
-        </div>
-      </div>
-      <div class="d-flex align-items-start mt-2">
-        <img src="/resources/tutorials2.svg" alt="" width="50px" height="50px" class="me-2">
-        <div>
-          <h5 style="text-transform: uppercase; color: #ff3131;" class="m-0">tutorials</h5>
-          <h5 class="two">Access tutorials by lectures and students</h5>
-        </div>
+  
+      <div class="mt-4" style="width: 100%;">
+        <form action="/home" method="post" class="d-flex flex-column">
+          <div data-mdb-input-init class="form-outline mb-4 ">
+            <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+              <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">School</label>
+              <div class="text-light bg-light m-0 rounded" style="width: 100%;">
+                <select name="school" id="school" class="form-control">
+                  
+                </select>
+                <!-- <label class="form-label bg-light text-dark p-0 ps-2 pe-2 mt-2" for="school" style="font-size: 20px;">School</label> -->
+              </div>
+            </div>
+          </div>
+  
+          <div data-mdb-input-init class="form-outline mb-4 ">
+            <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+              <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Department</label>
+              <div class="text-light bg-light m-0 rounded" style="width: 100%;">
+                <select name="department" id="department" class="form-control">
+                 
+                </select>
+              </div>
+            </div>
+          </div>
+  
+          <div data-mdb-input-init class="form-outline mb-4 ">
+            <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+              <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Year</label>
+              <div class="text-light bg-light m-0 rounded" style="width: 100%;">
+                <select name="year" id="year" class="form-control">
+                  <option value="Year_1.1">1.1</option>
+                  <option value="Year_1.2">1.2</option>
+                  <!-- <option value="Year_1.2">1.3</option> -->
+                  <option value="Year_2.1">2.1</option>
+                  <option value="Year_2.2">2.2</option>
+                  <option value="Year_2.3">2.3</option>
+                  <option value="Year_3.1">3.1</option>
+                </select>
+              </div>
+            </div>
+          </div>
+  
+          <!-- <div data-mdb-input-init class="form-outline mb-4 ">
+            <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+              <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Year</label>
+              <div class="text-light bg-light m-0 rounded" style="width: 100%;">
+                <input list="years" id="year" name="year" class="p-1 rounded" style="width: 100%; outline: none; border: none;" />
+  
+                <datalist id="years">
+                  <option value="Year_2.1">2.1</option>
+                  <option value="Year_2.2">2.2</option>
+                  <option value="Year_2.3">2.3</option>
+                </datalist>
+              </div>
+            </div>
+          </div> -->
+  
+  
+          <div data-mdb-input-init class="form-outline mb-2">
+            <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+              <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Unit</label>
+              <div class="text-light bg-light m-0 rounded" style="width: 100%;">
+                <select name="unit" id="unit" class="form-control">
+                  
+                </select>
+              </div>
+            </div>
+          </div>
+  
+          <!-- <div data-mdb-input-init class="form-outline mb-4 ">
+            <div class="d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+              <div class="text-light bg-light m-0 rounded" style="width: 100%;">
+                <input type="text" name="year" id="year" class="form-control" style="font-size: 20px;"/>
+                <label class="form-label bg-light text-dark p-0 ps-2 pe-2 mt-2" for="year" style="font-size: 20px;">Year</label>
+              </div>
+            </div>
+          </div> -->
+  
+          <button data-mdb-ripple-init type="submit" class="btn btn-block text-light mt-2 d-flex justify-content-center align-items-center" style="margin-bottom: 100px; font-size: 20px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="searchBtn">
+            <h6 class="h6 text-light" style="font-size: 20px;">
+              Search
+            </h6>
+            <div class="loadDivHome" style="display: none;"></div>
+          </button>
+        </form>
       </div>
     </div>
 
-    <div class="container-fluid mt-4">
-      <form action="/home" method="post" class="d-flex flex-column">
-        <div data-mdb-input-init class="form-outline mb-4 ">
-          <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
-            <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">School</label>
-            <div class="text-light bg-light m-0 rounded" style="width: 100%;">
-              <select name="school" id="school" class="form-control">
-                
-              </select>
-              <!-- <label class="form-label bg-light text-dark p-0 ps-2 pe-2 mt-2" for="school" style="font-size: 20px;">School</label> -->
-            </div>
-          </div>
-        </div>
-
-        <div data-mdb-input-init class="form-outline mb-4 ">
-          <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
-            <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Department</label>
-            <div class="text-light bg-light m-0 rounded" style="width: 100%;">
-              <select name="department" id="department" class="form-control">
-               
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div data-mdb-input-init class="form-outline mb-4 ">
-          <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
-            <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Year</label>
-            <div class="text-light bg-light m-0 rounded" style="width: 100%;">
-              <select name="year" id="year" class="form-control">
-                <option value="Year_1.1">1.1</option>
-                <option value="Year_1.2">1.2</option>
-                <!-- <option value="Year_1.2">1.3</option> -->
-                <option value="Year_2.1">2.1</option>
-                <option value="Year_2.2">2.2</option>
-                <option value="Year_2.3">2.3</option>
-                <option value="Year_3.1">3.1</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- <div data-mdb-input-init class="form-outline mb-4 ">
-          <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
-            <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Year</label>
-            <div class="text-light bg-light m-0 rounded" style="width: 100%;">
-              <input list="years" id="year" name="year" class="p-1 rounded" style="width: 100%; outline: none; border: none;" />
-
-              <datalist id="years">
-                <option value="Year_2.1">2.1</option>
-                <option value="Year_2.2">2.2</option>
-                <option value="Year_2.3">2.3</option>
-              </datalist>
-            </div>
-          </div>
-        </div> -->
-
-
-        <div data-mdb-input-init class="form-outline mb-2">
-          <div class=" d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
-            <label for="school" class="text-light me-4 ms-4 two d-flex justify-content-center align-items-center" style="width: 90px;">Unit</label>
-            <div class="text-light bg-light m-0 rounded" style="width: 100%;">
-              <select name="unit" id="unit" class="form-control">
-                
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- <div data-mdb-input-init class="form-outline mb-4 ">
-          <div class="d-flex justify-content-center rounded" style="padding: 1px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
-            <div class="text-light bg-light m-0 rounded" style="width: 100%;">
-              <input type="text" name="year" id="year" class="form-control" style="font-size: 20px;"/>
-              <label class="form-label bg-light text-dark p-0 ps-2 pe-2 mt-2" for="year" style="font-size: 20px;">Year</label>
-            </div>
-          </div>
-        </div> -->
-
-        <button data-mdb-ripple-init type="submit" class="btn btn-block text-light mt-2 d-flex justify-content-center align-items-center" style="margin-bottom: 100px; font-size: 20px; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="searchBtn">
-          <h6 class="h6 text-light" style="font-size: 20px;">
-            Search
-          </h6>
-          <div class="loadDivHome" style="display: none;"></div>
-        </button>
-      </form>
-    </div>
+    
 
     <script type="text/javascript" src="/js/home.js"></script>
     <!-- Font awesome -->

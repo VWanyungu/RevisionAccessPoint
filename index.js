@@ -117,5 +117,5 @@ app.get('/metrics', async (req, res) => {
 const port = process.env.PORT || 3000
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`)
-    console.log(`Metrics exposed on ${port}/metrics`);
+    // console.log(`Metrics exposed on ${port}/metrics`);
 })

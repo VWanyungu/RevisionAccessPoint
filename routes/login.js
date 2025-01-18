@@ -36,7 +36,7 @@ router.post('/', async (req,res)=>{
         res.cookie('token', token, {
             httpOnly: true, // Prevents access from JavaScript
             sameSite: 'strict', // Prevents CSRF
-            maxAge: 3600000, // 1 hour in milliseconds
+            maxAge: 3600000 * 24, // 1 hour in milliseconds
         })
         res.redirect('/home?message=' + encodeURIComponent("Login successful"))
     }catch(e){
