@@ -50,6 +50,12 @@ select, select option{
     animation: spin 8s linear infinite;
 }
 
+#notesDiv, #examsDiv, #catsDiv, #tutorialsDiv{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(300px, 1fr));
+    gap: 10px;
+}
+
 @keyframes spin{
     0%{
         transform: rotate(0deg);
@@ -97,6 +103,28 @@ select, select option{
     #mainHomeContentDiv{
         width: 100% !important;
         margin-top: 5vh !important;
+    }
+    #notesDiv, #examsDiv, #catsDiv, #tutorialsDiv{
+        display: grid;
+        grid-template-columns: repeat(1, minmax(300px, 1fr));
+        gap: 10px;
+    }
+    /* #navBarNav{
+        background: linear-gradient(to left, #ff3131 0%, #004aad 100%) !important;
+    } */
+    #container{
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    #container .navbar-brand{
+        margin-left: 1rem;
+    }
+    #container .navbar-nav{
+        padding-left: 1rem;
+        background: linear-gradient(to left, #ff3131 0%, #004aad 100%) !important;
+    }
+    #container .navbar-toggler{
+        margin-right: 1rem;
     }
 }
 @media only screen and (max-width: 425px){

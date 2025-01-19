@@ -56,7 +56,7 @@ router.get('/callback', async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true, // Prevents access from JavaScript
             sameSite: 'lax', // Prevents CSRF
-            maxAge: 3600000, // 1 hour in milliseconds
+            maxAge: 3600000 * 24, // 1 hour in milliseconds
         })
         if(res.get('Set-Cookie')){ // Check if cookie was set
             return res.redirect('/home')

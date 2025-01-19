@@ -26,15 +26,10 @@
           <div class="loadDiv2"></div>
         </div>
     </div>
-    <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 50px;">
+    <!-- <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 50px;">
         <div class="mb-3 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
             <div>
                 <h1 class="h1 text-light mb-0" style="font-size: 25px; font-weight: bold;">RAP</h1>
-                <!-- <div class="container d-flex flex-row align-items-center justify-content-start m-0 p-0">
-                    <h1 class="h1 text-light m-0" style="font-size: 25px; font-weight: bold;">Point</h1>
-                    <div class="ms-1" style="background-color: white; height: 25px; width: 85px;">
-                    </div>
-                </div> -->
             </div>
         </div>
 
@@ -43,8 +38,9 @@
               <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
             </button>
         </div>
-    </div>
-    <div class="container d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
+    </div> -->
+
+    <!-- <div class="container d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
       <div class="m-0 mt-1">
         <div class="container collapse navbar-collapse" id="collapsibleNavbar" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
           <ul class="navbar-nav">
@@ -57,10 +53,39 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <!-- <div style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 50px;"> -->
+        <nav class="container-fluid navbar navbar-expand-lg navbar-light bg-light" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 50px;">
+            <div class="container" id="container">
+                <a class="navbar-brand text-light" href="#"><b>RAP</b></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                style="box-shadow: none;">
+                <!-- <span class="navbar-toggler-icon"></span> -->
+                    <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- <div class="d-flex justify-content-end align-items-center w-100"> -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="/home" class="text-light nav-link" style="font-size: 17px; text-decoration: none;">
+                                    <!-- <i class="fa fa-home text-light me-0" aria-hidden="true"></i> -->
+                                    Home </a>
+                                </li>   
+                            <li class="nav-item">
+                                <a href="/" class="text-light nav-link" style="font-size: 17px; text-decoration: none;">
+                                <!-- <i class="fa fa-sign-out text-light me-0" aria-hidden="true"></i> -->
+                                Sign out</a>
+                            </li>  
+                        </ul>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </nav>
+    <!-- </div> -->
 
     <!-- Course information -->
-    <div class="container-fluid mt-2">
+    <div class="container mt-2">
         <h6 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= school.replaceAll("_"," ") %></h6>
         <H6 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= department.replaceAll("_"," ") %></H6>
         <h6 class="m-0" style="text-transform: uppercase; font-weight: 400;"><%= year.replaceAll("_"," ") %></h6>
@@ -69,7 +94,7 @@
     </div>
 
     <!-- Content navigation buttons -->
-    <div class="container-fluid mt-3 d-flex justify-content-start align-items-center">
+    <div class="container mt-3 d-flex justify-content-start align-items-center">
         <ul class="nav nav-pills  m-0" role="tablist" style="list-style: none;">
             <li class="p-1 ps-3 pe-3 me-2 rounded " style="border: 2px solid darkgray;">
                 <a class="text-muted" data-bs-toggle="pill" href="#notes" role="tab" style="text-decoration: none;" id="notesanchor">Notes</a>
@@ -87,88 +112,93 @@
     </div>
 
     <!-- Notes div -->
-    <div class="container-fluid tab-content mt-3 notes" id="pills-tabContent">
+    <div class="container tab-content mt-3 notes" id="pills-tabContent">
         <div class="tab-pane fade show pb-2" id="notes" role="tabpanel">
-            <!-- Note -->
-            <% notes.forEach(function(note) { %>
-                <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
-                    <div class="text-light bg-light m-0 rounded p-2" style="width: 100%; height: 100%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="/resources/notes.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h6 class="pe-2 m-0" style="color: #004aad; font-weight: 300;"><%= note.replace(".pdf"," ").replaceAll("_"," ") %></h6>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <a href="/quiz/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%= encodeURIComponent(noteUrls[note])%>" class="text-muted me-2 p-1 rounded quizLnk" style="border: 1px solid darkgray;" onclick="loadScreen()">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
+            <div id="notesDiv">
+                <!-- Note -->
+                <% notes.forEach(function(note) { %>
+                    <div class=" d-flex justify-content-center rounded" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
+                        <div class="text-light bg-light m-0 rounded p-2" style="width: 100%; height: 100%;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="/resources/notes.svg" alt="" width="25px" height="25px" class="me-2">
+                                    <h6 class="pe-2 m-0" style="color: #004aad; font-weight: 300;"><%= note.replace(".pdf"," ").replaceAll("_"," ") %></h6>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="/quiz/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%= encodeURIComponent(noteUrls[note])%>" class="text-muted me-2 p-1 rounded quizLnk" style="border: 1px solid darkgray;" onclick="loadScreen()">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
 
-                                <!-- <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=encodeURIComponent(note)%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;"> -->
-                                <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%= encodeURIComponent(noteUrls[note])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                </a>
+                                    <!-- <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%=encodeURIComponent(note)%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;"> -->
+                                    <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/classNotes/<%= encodeURIComponent(noteUrls[note])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div> 
-            <% }); %>
-            
+                    </div> 
+                <% }); %>
+            </div>
         </div>
 
         <!-- Exams div -->
         <div class="tab-pane fade show" id="exams" role="tabpanel">
-            <% exams.forEach(function(exam) { %>
-                <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
-                    <div class="text-light bg-light m-0 rounded p-2" style="width: 100%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="/resources/exam3.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h6 class="m-0" style="color: #004aad; font-weight: 300;"><%= exam.replace(".pdf"," ").replaceAll("_","-") %></h6>
+            <div id="examsDiv">
+                <% exams.forEach(function(exam) { %>
+                    <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
+                        <div class="text-light bg-light m-0 rounded p-2" style="width: 100%;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="/resources/exam3.svg" alt="" width="25px" height="25px" class="me-2">
+                                    <h6 class="m-0" style="color: #004aad; font-weight: 300;"><%= exam.replace(".pdf"," ").replaceAll("_","-") %></h6>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/exams/<%= encodeURIComponent(examUrls[exam])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/exams/<%= encodeURIComponent(examUrls[exam])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                </a>
-                            </div>
+                            
                         </div>
-                        
                     </div>
-                </div>
-            <% }) %>
-           
+                <% }) %>
+            </div>
         </div>
 
         <!-- Cats div -->
         <div class="tab-pane fade show" id="cats" role="tabpanel">
-            <% cats.forEach(function(cat) { %>
-                <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
-                    <div class="text-light bg-light m-0 rounded p-2" style="width: 100%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="/resources/exam3.svg" alt="" width="25px" height="25px" class="me-2">
-                                <h6 class="m-0" style="color: #004aad; font-weight: 300;"><%= cat.replace(".pdf"," ").replaceAll("_","-") %></h6>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/cats/<%= encodeURIComponent(catUrls[cat])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                </a>
+            <div id="catsDiv">
+                <% cats.forEach(function(cat) { %>
+                    <div class=" d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
+                        <div class="text-light bg-light m-0 rounded p-2" style="width: 100%;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="/resources/exam3.svg" alt="" width="25px" height="25px" class="me-2">
+                                    <h6 class="m-0" style="color: #004aad; font-weight: 300;"><%= cat.replace(".pdf"," ").replaceAll("_","-") %></h6>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="/pdf/<%=school%>/<%=department%>/<%=year%>/<%=unit%>/cats/<%= encodeURIComponent(catUrls[cat])%>" class="text-muted p-1 rounded" style="border: 1px solid darkgray;">
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <% }) %>
-            
+                <% }) %>
+            </div>
         </div>
 
         <!-- Tutorials div -->
         <div class="tab-pane fade show" id="tutorials" role="tabpanel">
-            <% tutorials.forEach((tutorial) => { %>
-                <div class="d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
-                    <div class="text-light bg-light rounded" style="width: 100%; position: relative;">
-                        <%- tutorial %>
+            <div id="tutorialsDiv">
+                <% tutorials.forEach((tutorial) => { %>
+                    <div class="d-flex justify-content-center rounded mt-2" style="background: linear-gradient(to left,#ff3131 0%, #004aad 100%); padding: 1px;">
+                        <div class="text-light bg-light rounded" style="width: 100%; position: relative;">
+                            <%- tutorial %>
+                        </div>
                     </div>
-                </div>
-            <% }) %>
+                <% }) %>
+            </div>
         </div>
     </div>
 
