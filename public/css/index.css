@@ -96,6 +96,7 @@ select, select option{
 	/*Big smartphones [426px -> 600px]*/
     #mainHomeContentDiv{
         width: 100% !important;
+        margin-top: 5vh !important;
     }
 }
 @media only screen and (max-width: 425px){
