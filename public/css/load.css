@@ -1,4 +1,4 @@
-.load{
+.load, .loadAlt{
     background-color: white;
     width: 40px;
     height: 40px;
@@ -6,7 +6,7 @@
     border: 5px dotted blue;
     animation: spin 8s linear infinite;
 }
-.load2{
+.load2, .load2Alt{
     background-color: white;
     width: 12px;
     height: 18px;

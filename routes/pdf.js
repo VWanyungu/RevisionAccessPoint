@@ -12,8 +12,19 @@ router.get('/:school/:department/:year/:unit/:folder/:file',cache(),(req, res) =
     if (!token) {
         return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
     }
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified
+    // const verified = jwt.verify(token, process.env.JWT_SECRET);
+    // req.user = verified
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            if (err.name === 'TokenExpiredError') {
+                return res.redirect('/?message=' + encodeURIComponent("Session expired. Please login again"));
+            }
+            return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"));
+        }
+        req.user = decoded;
+    });
+
     try{
         const { school, department, year, unit, folder, file } = req.params;
         // The path is used to locate the pdf file

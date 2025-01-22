@@ -43,7 +43,7 @@
   <body>
         <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
 
-            <div class="p-0 d-flex justify-content-center align-items-center"  >
+            <div class="p-0 d-flex justify-content-center align-items-center"  style="width: 317.278px;">
                 <div class="card text-muted" style="width: 100%;">
                     <div class="card-body m-0">
                         <div class=" mb-4 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
@@ -64,7 +64,7 @@
                             
                             <button type="submit" class="mb-3 btn" style="width: 100%; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="loginBtn" onclick="login">
                                 <h6 class="h6 text-light m-0" style="font-size: 18px;">
-                                    Login 
+                                   Login
                                 </h6>
                                 <div class="loadDiv container flex-column align-items-center justify-content-center" style="display: none;">
                                     <div class="load">
@@ -74,9 +74,17 @@
                                 </div>
                             </button>
 
-                            <a href="/auth/google" class="mb-3 btn text-light" style="width: 100%; font-size: 18px; font-weight: 500; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="googleLoginBtn">
-                                <i class="fa-brands fa-google me-2"></i> or continue with google
-                            </a>
+                            <div id="continueGoogle" class="btn rounded" style="width: 100%; font-size: 18px; font-weight: 500; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+                                <a href="#" class="m-0 text-light" id="googleLoginBtn" style="text-decoration: none; width: 100%; font-size: 18px;" onclick="continueGoogleFn()">
+                                    <i class="fa-brands fa-google me-2"></i> or continue with google
+                                </a>
+                                <div class="loadDivAlt container flex-column align-items-center justify-content-center" style="display: none;">
+                                    <div class="loadAlt">
+                                        <div class="load2Alt">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="d-flex flex-column justify-content-center align-items-center">
                                 <h6 class="h6 text-muted mt-3" style="font-weight: 300;">Go to <a class="text-muted" href="/signUp" id="signUpLink"><strong style="text-decoration: underline;">Sign up</strong></a></h6>

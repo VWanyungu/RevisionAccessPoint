@@ -34,15 +34,10 @@
         <div class="loadDiv2"></div>
       </div>
     </div>
-    <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
+    <!-- <div class="container-fluid d-flex align-items-center justify-content-between" id="nav" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
         <div class="mb-3 d-flex align-items-center justify-content-start" id="logo" style="margin-top: 10px;">
             <div>
                 <h1 class="h1 text-light mb-0" style="font-size: 25px; font-weight: bold;">RAP</h1>
-                <!-- <div class="container d-flex flex-row align-items-center justify-content-start m-0 p-0">
-                    <h1 class="h1 text-light m-0" style="font-size: 25px; font-weight: bold;">Point</h1>
-                    <div class="ms-1" style="background-color: white; height: 25px; width: 85px;">
-                    </div>
-                </div> -->
             </div>
         </div>
         <div>
@@ -50,8 +45,8 @@
               <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
             </button>
         </div>
-    </div>
-    <div class="container d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
+    </div> -->
+    <!-- <div class="container d-flex justify-content-end align-items-center p-0" style="position: absolute; z-index: 1; right: 3px;">
       <div class="m-0 mt-1">
         <div class="container collapse navbar-collapse" id="collapsibleNavbar" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%);">
           <ul class="navbar-nav">
@@ -73,7 +68,40 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <nav class="container-fluid navbar navbar-expand-lg navbar-light bg-light" style="background: linear-gradient(to left, #ff3131 0%, #004aad 100%); height: 50px;">
+      <div class="container" id="container">
+          <a class="navbar-brand text-light" href="#"><b>RAP</b></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+          style="box-shadow: none;">
+          <!-- <span class="navbar-toggler-icon"></span> -->
+              <i class="fa fa-bars text-light" aria-hidden="true" style="font-size: 20px;"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <!-- <div class="d-flex justify-content-end align-items-center w-100"> -->
+                  <ul class="navbar-nav w-100 d-flex justify-content-end">
+                      <li class="nav-item">
+                          <a href="/home" class="text-light nav-link" style="font-size: 17px; text-decoration: none;" onclick="showLoader()">
+                              <!-- <i class="fa fa-home text-light me-0" aria-hidden="true"></i> -->
+                              Home </a>
+                      </li>   
+                      <li class="nav-item">
+                        <a href="<%=notesPath%>" class="text-light nav-link" style="font-size: 17px; text-decoration: none;" onclick="showLoader()">
+                          <!-- <i class="fa fa-book text-light me-0" aria-hidden="true"></i>&nbsp;   -->
+                          Notes
+                        </a>
+                      </li> 
+                      <li class="nav-item">
+                          <a href="/" class="text-light nav-link" style="font-size: 17px; text-decoration: none;" onclick="showLoader()">
+                          <!-- <i class="fa fa-sign-out text-light me-0" aria-hidden="true"></i> -->
+                          Sign out</a>
+                      </li>  
+                  </ul>
+              <!-- </div> -->
+          </div>
+      </div>
+    </nav>
 
     <div class="container-fluid p-0">
       <pdfjs-viewer-element 
@@ -87,7 +115,14 @@
     <script>
       window.addEventListener('DOMContentLoaded', (event) => {
             document.getElementById('hide').style.display = 'none'
-        });
+      });
+
+      function showLoader(){
+          document.getElementById('hide').style.display = 'block'
+          setTimeout(()=>{
+              document.getElementById('hide').style.display = 'none'
+          }, 10000)
+      }
     </script>
     <!-- Font awesome -->
     <script src="https://kit.fontawesome.com/69a11c0c5f.js" crossorigin="anonymous"></script>

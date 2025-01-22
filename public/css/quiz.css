@@ -32,3 +32,34 @@ input[type="radio"] + label:before {
 input[type="radio"]:checked + label:before {
     background-color: #004aad;
 }
+
+#questionsDiv, #quizResultsDiv{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(300px, 1fr));
+    gap: 10px;
+}
+
+@media only screen and (max-width: 1200px){
+    #questionsDiv, #quizResultsDiv{
+        display: grid;
+        grid-template-columns: repeat(3, minmax(300px, 1fr));
+        gap: 10px;
+    }
+}
+@media only screen and (max-width: 800px){
+    #questionsDiv, #quizResultsDiv{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(300px, 1fr));
+        gap: 10px;
+    }
+}
+@media only screen and (max-width: 600px){
+    #questionsDiv, #quizResultsDiv{
+        display: grid;
+        grid-template-columns: repeat(1, minmax(300px, 1fr));
+        gap: 10px;
+    }
+}
+@media only screen and (max-width: 425px){
+	
+}

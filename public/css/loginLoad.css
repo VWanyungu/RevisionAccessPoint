@@ -1,11 +1,11 @@
-.load{
+.load, .loadAlt{
     width: 30px;
     height: 30px;
     border-radius: 50%;
     border: 5px dotted white;
     animation: spin 8s linear infinite;
 }
-.load2{
+.load2, .load2Alt{
     width: 10px;
     height: 15px;
     margin-left: -10px;

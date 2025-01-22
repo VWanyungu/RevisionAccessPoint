@@ -11,13 +11,21 @@ router.get('/',cache(),(req,res)=>{
     if (!token) {
         return res.status(200).redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
     }
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified;
-    try{    
-        res.status(200).render('home.ejs',{message})
-    }catch(e){
-        console.log(`Error loading home page: ${e}`)
-    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            if (err.name === 'TokenExpiredError') {
+                return res.redirect('/?message=' + encodeURIComponent("Session expired. Please login again"));
+            }
+            return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"));
+        }
+        req.user = decoded;
+        try{    
+            res.status(200).render('home.ejs',{message})
+        }catch(e){
+            console.log(`Error loading home page: ${e}`)
+        }
+    });
 })
 
 router.post('/',(req,res)=>{
