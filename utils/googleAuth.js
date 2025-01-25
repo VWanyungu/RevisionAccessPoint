@@ -51,7 +51,7 @@ router.get('/callback', async (req, res) => {
             }
         }
         const user = { "email": payload.email, "role": loginStatus.role}
-        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.cookie('token', token, {
             httpOnly: true, // Prevents access from JavaScript
             sameSite: 'lax', // Prevents CSRF
