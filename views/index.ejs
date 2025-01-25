@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#044aab"/>
     <title>Revision Access Point</title>
 
-    <link rel="icon" type="image/x-icon" href="/logo.svg">
+    <link rel="icon" type="image/x-icon" href="/resources/logo.svg">
     <!-- <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/loginLoad.css"> -->
     <link rel="manifest" href="/manifest.json">
@@ -41,13 +41,13 @@
 
   </head>
   <body>
-        <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
 
-            <div class="p-0 d-flex justify-content-center align-items-center" style="width: 80vw;" >
+            <div class="p-0 d-flex justify-content-center align-items-center"  style="width: 317.278px;">
                 <div class="card text-muted" style="width: 100%;">
                     <div class="card-body m-0">
                         <div class=" mb-4 d-flex align-items-center justify-content-center" id="logo" style="margin-top: 10px;">
-                            <h4 class="h4 text-dark mb-0" style="font-weight: bold;">Revision Access Point</h4>
+                            <h4 class="h4 text-dark mb-0" style="font-weight: bold;">Login</h4>
                         </div>
 
                         <form action="/" method="post" class="" id="loginForm">
@@ -63,23 +63,32 @@
                             </div>
                             
                             <button type="submit" class="mb-3 btn" style="width: 100%; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="loginBtn" onclick="login">
-                                <h6 class="h6 text-light" style="font-size: 20px;">
-                                    Login 
+                                <h6 class="h6 text-light m-0" style="font-size: 18px;">
+                                   Login
                                 </h6>
-                                <div class="loadDiv container d-flex flex-column align-items-center justify-content-center" >
-                                    <div class="load" style="display: none;">
+                                <div class="loadDiv container flex-column align-items-center justify-content-center" style="display: none;">
+                                    <div class="load">
                                         <div class="load2">
                                         </div>
                                     </div>
                                 </div>
                             </button>
 
-                            <a href="/auth/google" class="mb-3 btn text-light" style="width: 100%; font-size: 20px; font-weight: 500; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);" id="googleLoginBtn">
-                                <i class="fa-brands fa-google me-2"></i> or continue with google
-                            </a>
+                            <div id="continueGoogle" class="btn rounded" style="width: 100%; font-size: 18px; font-weight: 500; background: linear-gradient(to left,#ff3131 0%, #004aad 100%);">
+                                <a href="/auth/google" class="m-0 text-light" id="googleLoginBtn" style="text-decoration: none; width: 100%; font-size: 18px;" onclick="continueGoogleFn()">
+                                    <!-- <i class="fa-brands fa-google me-2"></i> -->
+                                     or continue with google
+                                </a>
+                                <div class="loadDivAlt container flex-column align-items-center justify-content-center" style="display: none;">
+                                    <div class="loadAlt">
+                                        <div class="load2Alt">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="d-flex flex-column justify-content-center align-items-center">
-                                <h6 class="h5 text-muted mt-3" style="font-weight: 300;">Back to <a class="text-muted" href="/signUp" id="signUpLink"><strong style="text-decoration: underline;">Sign up</strong></a></h6>
+                                <h6 class="h6 text-muted mt-3" style="font-weight: 300;">Go to <a class="text-muted" href="/signUp" id="signUpLink"><strong style="text-decoration: underline;">Sign up</strong></a></h6>
                                 <h6 style="font-size: 12px; color: darkgray;">icons by <a href="https://icons8.com/" style="color: darkgray;">icons8</a></h6>
                             </div>
                         </form>

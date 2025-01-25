@@ -10,14 +10,12 @@ const keys = {
     google: {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        // redirectURI: 'http://localhost:3000/auth/google/callback'
         redirectURI: process.env.REDIRECT_URI
     }
 }
 const client = new OAuth2Client(keys.google.clientID, keys.google.clientSecret, keys.google.redirectURI) 
-// Generate the URL for Google authentication
+
 router.get('/', (req, res) => {
-    // console.log("Authenticating via google...")
     const url = client.generateAuthUrl({
         access_type: 'offline',
         scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email']
@@ -25,8 +23,8 @@ router.get('/', (req, res) => {
     res.redirect(url)
 })
 
+// Callback route after google login
 router.get('/callback', async (req, res) => {
-    // console.log("Callback from google...")
     const code = req.query.code;
     const { tokens } = await client.getToken(code);
     client.setCredentials(tokens);
@@ -34,11 +32,12 @@ router.get('/callback', async (req, res) => {
         idToken: tokens.id_token,
         audience: keys.google.clientID
     })
-    const payload = ticket.getPayload();
-    // console.log("1. Payload loaded: " + payload.email)
+    const payload = ticket.getPayload(); // data from google
+    
     if(!payload){
-        return res.redirect('/?message=' + encodeURIComponent("User does not exist. Please sign up."))
+        return res.redirect('/?message=' + encodeURIComponent("User not found"))
     }
+
     try{
         const loginStatus = await db.login(payload.email, payload.sub)
         if(!loginStatus){
@@ -52,11 +51,11 @@ router.get('/callback', async (req, res) => {
             }
         }
         const user = { "email": payload.email, "role": loginStatus.role}
-        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.cookie('token', token, {
             httpOnly: true, // Prevents access from JavaScript
             sameSite: 'lax', // Prevents CSRF
-            maxAge: 3600000, // 1 hour in milliseconds
+            maxAge: 3600000 * 24, // 1 hour in milliseconds
         })
         if(res.get('Set-Cookie')){ // Check if cookie was set
             return res.redirect('/home')

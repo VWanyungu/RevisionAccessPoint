@@ -1,6 +1,12 @@
 # testing
 testing/
 
+data/
+
+prometheus.yml
+
+bfg.jar
+
 # Logs
 logs
 *.log

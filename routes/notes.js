@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import { createClient } from '@supabase/supabase-js';
 import cache from '../utils/cache.js';
 import { config } from 'dotenv';
-config();
 
+config();
 const router = express.Router();
 
 // Initialize Supabase client
@@ -16,78 +16,56 @@ const supabase = createClient(
 // Helper function to list files in a Supabase storage path
 async function listFiles(bucketName, path) {
   try {
-    // console.log(`Listing files in bucket: ${bucketName} and path: ${path}...`);
+    // Get a list of files from the bucket, in the path
     const { data, error } = await supabase.storage
       .from(bucketName)
       .list(path);
-
     if (error) throw error;
-    // console.log(`Files in ${path}:`, data);
-    // Filter out directories and return only file names
-    return data
-    //   .filter(item => !item.metadata) // Directories have metadata, files don't
-      .map(item => item.name);
+
+    // Filter and return only file names
+    return data.map(item => item.name);
+
   } catch (error) {
     console.error(`Error listing files in ${path}:`, error);
     throw error;
   }
 }
 
-// Helper function to read tutorial file content
-
 // Helper function to get signed URLs for all files in a directory
 async function getSignedUrlsForFiles(bucketName, path, files) {
   const signedUrls = {};
   for (const file of files) {
     const filePath = `${path}/${file}`;
-    // console.log(`Creating signed URL for ${filePath}...`);
-    // const { data, error } = await supabase.storage
-    //   .from(bucketName)
-    //   .createSignedUrl(filePath, 3600);
-    
     const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath)
-
-    // console.log(data.publicUrl)
-    
-    // if (error) {
-    //   console.error(`Error creating signed URL for ${filePath}:`, error);
-    //   continue;
-    // }
-    
     signedUrls[file] = data.publicUrl
-    // console.log(`Signed URL for ${filePath}:`, data.signedUrl);
   }
   return signedUrls;
 }
 
+// Helper function to read tutorials from the tutorials.txt file
+let tutorials
+function split(school, department, year, unit) {
+  return new Promise(async(resolve, reject) => {
+      const fs2 = (await import("fs"))
+      fs2.readFile(`./notes/${school}/${department}/${year}/${unit}/tutorials.txt`, 'utf8', function(err, data) {
+          if (err) {
+              return reject(err);
+          }
+          tutorials = data.split('\n');
+          resolve(tutorials.pop());
+      });
+  });
+}
+
 router.get('/:school/:department/:year/:unit',cache(),async (req, res) => {
-  const token = req.cookies.token;
   let message = req.query.message;
-  
-  if (!token) {
-    return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"));
-  }
-  
-  const verified = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = verified;
 
   try {
+    // Get path parameters
     const { school, department, year, unit } = req.params;
-    const bucketName = 'notes';
 
-    const fs2 = (await import("fs"))
-    let tutorials
-    function split() {
-        return new Promise((resolve, reject) => {
-            fs2.readFile(`./notes/${school}/${department}/${year}/${unit}/tutorials.txt`, 'utf8', function(err, data) {
-                if (err) {
-                    return reject(err);
-                }
-                tutorials = data.split('\n');
-                resolve(tutorials.pop());
-            });
-        });
-    }
+    // Define bucket name 
+    const bucketName = 'notes';
 
     // Construct paths
     const notesPath = `${school}/${department}/${year}/${unit}/classNotes`;
@@ -100,36 +78,16 @@ router.get('/:school/:department/:year/:unit',cache(),async (req, res) => {
       listFiles(bucketName, notesPath),
       listFiles(bucketName, examsPath),
       listFiles(bucketName, catsPath),
-    //   readTutorials(bucketName, tutorialsPath)
-    split()
+      split(school, department, year, unit)
     ]);
 
-    // console.log(`Turotials: ${tutorialsTemp}`)
-
-    // Get signed URLs for all files in parallel
+    // Get signed URLs for all files in parallel (public access URLs)
     const [noteUrls, examUrls, catUrls] = await Promise.all([
       getSignedUrlsForFiles(bucketName, notesPath, noteFiles),
       getSignedUrlsForFiles(bucketName, examsPath, examFiles),
       getSignedUrlsForFiles(bucketName, catsPath, catFiles)
     ]);
-
-// console.log({
-//     // File data with signed URLs
-//     notes: noteFiles,
-//     exams: examFiles,
-//     cats: catFiles,
-//     noteUrls,
-//     examUrls,
-//     catUrls,
-//     tutorials,
-//     // Path information
-//     school,
-//     department,
-//     year,
-//     unit,
-//     // Message
-//     message
-//   })
+    
     res.render('notes.ejs', {
       // File data with signed URLs
       notes: noteFiles,
