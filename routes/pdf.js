@@ -1,34 +1,14 @@
 import express from 'express';
-import jwt from 'jsonwebtoken'
-import axios from 'axios';
 import cache from '../utils/cache.js';
 import { config } from 'dotenv';
 config()
 const router = express.Router();
 
 router.get('/:school/:department/:year/:unit/:folder/:file',cache(),(req, res) => {
-    const token = req.cookies.token
     let message = req.query.message
-    if (!token) {
-        return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"))
-    }
-    // const verified = jwt.verify(token, process.env.JWT_SECRET);
-    // req.user = verified
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            if (err.name === 'TokenExpiredError') {
-                return res.redirect('/?message=' + encodeURIComponent("Session expired. Please login again"));
-            }
-            return res.redirect('/?message=' + encodeURIComponent("Unauthorized. Please login"));
-        }
-        req.user = decoded;
-    });
 
     try{
         const { school, department, year, unit, folder, file } = req.params;
-        // The path is used to locate the pdf file
-        // const path = `/${school}/${department}/${year}/${unit}/${folder}/${file}`
 
         // The notes path is used to navigate back to the notes page
         const notesPath = `/notes/${school}/${department}/${year}/${unit}`

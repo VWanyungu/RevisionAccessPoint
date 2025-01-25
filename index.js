@@ -8,8 +8,11 @@ import timeout from 'connect-timeout';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import client from 'prom-client'
+
 config()
 const app = express();
+
+import * as token from './utils/middlewares/token.js'
 
 // Route handlers
 import homeHandler from './routes/home.js'
@@ -69,6 +72,7 @@ app.use(express.static('public', staticFileCaching));
 app.use(express.static('icons')); //PWA icons
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
 app.use(cookieParser())
+// app.use(token.checkToken) // Check for token in cookies
 // app.use(helmet()); // Adds various HTTP headers for security
 app.use(morgan('common'));
 app.use(compression()); // Compress responses
@@ -79,10 +83,10 @@ app.use(cors(corsConfig));
 // Route redirection
 app.use('/',loginHandler)
 app.use('/signUp',signUpHandler)
-app.use('/home',homeHandler)
-app.use('/notes',notesHandler)
-app.use('/pdf',pdfHandler)
-app.use('/quiz',quizHandler)
+app.use('/home',token.checkToken,homeHandler)
+app.use('/notes',token.checkToken,notesHandler)
+app.use('/pdf',token.checkToken,pdfHandler)
+app.use('/quiz',token.checkToken,quizHandler)
 app.use('/auth/google', googleAuthHandler)
 
 // Middleware to track metrics

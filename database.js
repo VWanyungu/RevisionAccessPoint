@@ -3,6 +3,8 @@ import { config } from 'dotenv';
 import bcrypt from 'bcrypt'
 export {login, signUp, checkUser}
 config();
+
+// Connect to database
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
@@ -16,16 +18,20 @@ if(supabase){
 // Insert users
 async function signUp(name, email, password){
     try{
+        // If user exists, return false
         if(await checkUser(email)){
             return false
         }
 
+        // Hash password
         const saltRounds = 10
         let hash = await bcrypt.hash(password, saltRounds)
         if(!hash){
             console.error('\nError hashing signUp data')
             return false
         }
+
+        // Insert user
         const { data, error } = await supabase
         .from('Users')
         .insert([
@@ -35,7 +41,8 @@ async function signUp(name, email, password){
             console.error('\nError inserting data during signUp:', error)
             return false
         }
-        // console.log('\nSignUp successful: ' + email)
+        
+        // Return true if successful
         return true
     }catch(e){
         console.log("\nError in signUp: " + e)
@@ -43,8 +50,10 @@ async function signUp(name, email, password){
     }
 }
 
+// Login users
 async function login (email, password){
     try{
+        // Check if user exists
         const { data, error } = await supabase
         .from('Users')
         .select("*")
@@ -53,18 +62,21 @@ async function login (email, password){
             console.error('\nError fetching data during login:', error)
             return false
         }
+
+        // User not found
         if(data && data.length == 0){
-            console.log("\nUser not found during login")
+            console.log("\nUser not found")
             return false
         }
-        // console.log(`\nLogin data fetched successfully: ` + data[0].email)
 
+        // Check if password matches
         let passwordMatch = await bcrypt.compare(password, data[0].password)
         if(!passwordMatch){
             console.log("\nLogin password incorrect")
             return false
         }
-        // console.log("\nLogin successful")
+
+        // Return user data
         return data[0]
     }catch(e){
         console.log("\nError in login: " + e)
@@ -72,25 +84,27 @@ async function login (email, password){
     }
 }
 
+// Check if email exists
 async function checkUser (email){
     try{
+        // Check if email exists
         const { data, error } = await supabase
         .from('Users')
         .select()
         .eq('email', email)
-
         if(error) {
             console.error('\n Error checking email in database: ', error)
             return false
-        }else{
-            if(data && data.length > 0){
-                // console.log(`\nEmail exists`)
-                return true
-            }else if(data && data.length == 0){
-                // console.log("\nEmail does not exist")
-                return false
-            }
         }
+
+        // Email does not exist
+        if(data && data.length == 0){
+            console.log("\nEmail does not exist")
+            return false
+        }
+
+        // Email exists
+        return true
     }catch(e){
         console.log("\nError checking email: " + e)
         return false
