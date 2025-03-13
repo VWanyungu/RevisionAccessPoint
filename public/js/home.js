@@ -107,6 +107,7 @@ let schoolDepUnits = [
                 unitNames: [
                     'Computer Graphics',
                     'Human Computer Interface',
+                    'Generic Programming'
                 ]
             }
         ]
