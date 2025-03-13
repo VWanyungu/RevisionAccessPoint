@@ -101,6 +101,13 @@ let schoolDepUnits = [
                     'Network Programming',
                     'Software Engineering',
                 ]
+            },
+            {
+                year: 'Year_3.2',
+                unitNames: [
+                    'Computer Graphics',
+                    'Human Computer Interface',
+                ]
             }
         ]
     },
