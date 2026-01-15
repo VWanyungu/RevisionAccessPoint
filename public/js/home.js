@@ -111,6 +111,18 @@ let schoolDepUnits = [
           "Compiler Design",
         ],
       },
+      {
+        year: "Year_4.1",
+        unitNames: [
+          "Computer Forensics",
+          "Database Management",
+          "Distributed Systems",
+          "Machine Learning",
+          "Management of Information Systems",
+          "Project",
+          "Software Project Management",
+        ],
+      },
     ],
   },
   {
